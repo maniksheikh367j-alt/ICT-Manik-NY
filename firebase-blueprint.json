@@ -1,0 +1,93 @@
+{
+  "entities": {
+    "TradingLog": {
+      "title": "Trading Log",
+      "description": "Daily trading journal entry",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "format": "date" },
+        "pair": { "type": "string" },
+        "status": { "type": "string", "enum": ["profit", "loss", "breakeven"] },
+        "performance": { "type": "string" },
+        "description": { "type": "string" },
+        "lesson": { "type": "string" }
+      },
+      "required": ["date", "pair", "status", "performance", "description"]
+    },
+    "StoryPoint": {
+      "title": "Story Point",
+      "description": "A milestone in the trading journey",
+      "type": "object",
+      "properties": {
+        "year": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["year", "title", "description"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "A course or indicator for sale",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["course", "indicator"] },
+        "status": { "type": "string", "enum": ["available", "coming_soon"] },
+        "image": { "type": "string" },
+        "price": { "type": "string" }
+      },
+      "required": ["name", "description", "type", "status"]
+    },
+    "BlogPost": {
+      "title": "Blog Post",
+      "description": "Daily trading experience post",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "date": { "type": "string" },
+        "image": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["title", "content", "date"]
+    },
+    "SiteConfig": {
+      "title": "Site Configuration",
+      "description": "Global settings for the website",
+      "type": "object",
+      "properties": {
+        "logoName": { "type": "string" },
+        "logoInitials": { "type": "string" },
+        "tagline": { "type": "string" },
+        "storyTitle": { "type": "string" },
+        "storyQuote": { "type": "string" },
+        "telegram": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "email": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/logs/{logId}": {
+      "schema": "TradingLog",
+      "description": "Trading logs collection"
+    },
+    "/stories/{storyId}": {
+      "schema": "StoryPoint",
+      "description": "Journey milestones"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Products marketplace"
+    },
+    "/posts/{postId}": {
+      "schema": "BlogPost",
+      "description": "Daily blog posts"
+    },
+    "/config/settings": {
+      "schema": "SiteConfig",
+      "description": "Global settings"
+    }
+  }
+}

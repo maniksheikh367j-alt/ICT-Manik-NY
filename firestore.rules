@@ -1,0 +1,104 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Phase 3: Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isEmailVerified() && request.auth.token.email == 'maniksheikh2006@gmail.com';
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 1. Logs
+    match /logs/{logId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidLog(incoming());
+      allow update: if isAdmin() && isValidLog(incoming());
+      allow delete: if isAdmin();
+    }
+
+    function isValidLog(data) {
+      return data.keys().hasAll(['date', 'pair', 'status', 'performance', 'description', 'lesson'])
+        && data.date is string
+        && data.pair is string && data.pair.size() <= 20
+        && data.status in ['profit', 'loss', 'breakeven']
+        && data.performance is string && data.performance.size() <= 50
+        && data.description is string && data.description.size() <= 1000
+        && data.lesson is string && data.lesson.size() <= 500;
+    }
+
+    // 2. Stories
+    match /stories/{storyId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidStory(incoming());
+      allow update: if isAdmin() && isValidStory(incoming());
+      allow delete: if isAdmin();
+    }
+
+    function isValidStory(data) {
+      return data.keys().hasAll(['year', 'title', 'description'])
+        && data.year is string && data.year.size() <= 10
+        && data.title is string && data.title.size() <= 100
+        && data.description is string && data.description.size() <= 2000;
+    }
+
+    // 3. Products
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidProduct(incoming());
+      allow update: if isAdmin() && isValidProduct(incoming());
+      allow delete: if isAdmin();
+    }
+
+    function isValidProduct(data) {
+      return data.keys().hasAll(['name', 'description', 'type', 'status'])
+        && data.name is string && data.name.size() <= 100
+        && data.description is string && data.description.size() <= 2000
+        && data.type in ['course', 'indicator']
+        && data.status in ['available', 'coming_soon'];
+    }
+
+    // 4. Posts
+    match /posts/{postId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidPost(incoming());
+      allow update: if isAdmin() && isValidPost(incoming());
+      allow delete: if isAdmin();
+    }
+
+    function isValidPost(data) {
+      return data.keys().hasAll(['title', 'content', 'date'])
+        && data.title is string && data.title.size() <= 200
+        && data.content is string && data.content.size() <= 10000
+        && data.date is string;
+    }
+
+    // 5. Config
+    match /config/settings {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

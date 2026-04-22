@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { useSiteData } from '../context/SiteContext';
-import { ShoppingCart, Lock, X, CheckCircle2, MessageCircle } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { ShoppingCart, Lock, X, CheckCircle2, MessageCircle, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { Product } from '../types';
 
@@ -20,220 +19,217 @@ export default function StoreSection() {
   };
   
   return (
-    <section id="store" className="py-24 px-10">
-      {/* Product Details Modal */}
+    <section id="store" className="py-32 px-6 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-1/2 h-px bg-linear-to-r from-transparent to-white/5" />
+      
       <AnimatePresence>
         {selectedProduct && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }}
               onClick={() => setSelectedProduct(null)}
-              className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/95 backdrop-blur-md"
             />
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-2xl bg-zinc-950 border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              className="relative w-full max-w-4xl bg-brand-bg border border-white/10 overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-2"
             >
-              <button 
-                onClick={() => setSelectedProduct(null)}
-                className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors text-zinc-400 hover:text-white z-10"
-              >
-                <X size={20} />
-              </button>
-
-              <div className="h-48 md:h-64 w-full relative">
+              <div className="relative h-64 md:h-full bg-zinc-900 border-r border-white/5">
                 {selectedProduct.image ? (
-                  <img src={selectedProduct.image} className="w-full h-full object-cover" alt={selectedProduct.name} />
+                  <img src={selectedProduct.image} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt={selectedProduct.name} />
                 ) : (
-                  <div className="w-full h-full bg-zinc-900 flex items-center justify-center text-brand-accent">
-                    <ShoppingCart size={48} />
+                  <div className="w-full h-full flex items-center justify-center text-brand-accent/20">
+                    <ShoppingCart size={120} strokeWidth={0.5} />
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent" />
-                <div className="absolute bottom-6 left-8">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-accent mb-2 block">{selectedProduct.type}</span>
-                  <h2 className="text-3xl font-bold">{selectedProduct.name}</h2>
+                <div className="absolute top-8 left-8">
+                  <span className="text-[10px] font-mono font-bold text-brand-accent uppercase tracking-[0.5em] bg-brand-bg/80 backdrop-blur-md px-4 py-2">
+                    {selectedProduct.type}
+                  </span>
                 </div>
               </div>
 
-              <div className="p-8 md:p-10 max-h-[60vh] overflow-y-auto custom-scrollbar">
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-4">Description</h4>
-                    <p className="text-zinc-300 leading-relaxed text-lg">{selectedProduct.description}</p>
-                  </div>
+              <div className="p-10 md:p-16 flex flex-col justify-between">
+                <button 
+                  onClick={() => setSelectedProduct(null)}
+                  className="absolute top-6 right-6 text-zinc-500 hover:text-white transition-colors"
+                >
+                  <X size={24} />
+                </button>
 
-                  {selectedProduct.details && (
-                    <div className="pt-6 border-t border-white/5">
-                      <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-4">Detailed Information</h4>
-                      <div className="text-zinc-400 leading-relaxed whitespace-pre-wrap space-y-4">
-                        {selectedProduct.details.split('\n').map((line, i) => (
-                          <p key={i} className="flex gap-3">
-                            <CheckCircle2 size={18} className="text-brand-accent shrink-0 mt-1" />
-                            {line}
-                          </p>
-                        ))}
+                <div>
+                  <h2 className="text-4xl font-serif italic font-black uppercase mb-8 leading-tight tracking-tighter">
+                    {selectedProduct.name}
+                  </h2>
+                  <div className="space-y-8">
+                    <p className="text-zinc-400 text-lg leading-relaxed font-light italic">
+                      "{selectedProduct.description}"
+                    </p>
+                    {selectedProduct.details && (
+                      <div className="space-y-4 pt-8 border-t border-white/5">
+                        <p className="text-[10px] font-mono font-bold text-zinc-600 uppercase tracking-widest">Specifications_&_Syllabus</p>
+                        <div className="grid grid-cols-1 gap-4">
+                          {selectedProduct.details.split('\n').map((line, i) => (
+                            <div key={i} className="flex gap-4 items-start">
+                              <CheckCircle2 size={16} className="text-brand-accent mt-1 shrink-0" />
+                              <span className="text-zinc-500 text-sm font-medium">{line}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-
-                  <div className="pt-10 flex gap-4">
-                    <button 
-                      onClick={() => setShowCheckout(true)}
-                      className="flex-1 bg-brand-accent text-brand-bg font-bold py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform"
-                    >
-                      Instant Buy
-                    </button>
-                    <button 
-                      onClick={() => openWhatsApp(selectedProduct)}
-                      className="px-6 bg-white/5 border border-white/10 text-white rounded-2xl flex items-center justify-center hover:bg-white/10 transition-colors"
-                    >
-                      <MessageCircle size={20} />
-                    </button>
+                    )}
                   </div>
+                </div>
+
+                <div className="flex gap-4 mt-16">
+                  <button 
+                    onClick={() => setShowCheckout(true)}
+                    className="flex-1 bg-brand-accent text-brand-bg py-5 font-black uppercase tracking-widest text-[10px] hover:bg-white transition-all shadow-xl shadow-brand-accent/10"
+                  >
+                    Initiate_Order
+                  </button>
+                  <button 
+                    onClick={() => openWhatsApp(selectedProduct)}
+                    className="px-8 border border-white/10 text-white hover:bg-white/5 transition-all flex items-center justify-center"
+                  >
+                    <MessageCircle size={20} />
+                  </button>
                 </div>
               </div>
             </motion.div>
           </div>
         )}
 
-        {/* Checkout Modal */}
         {selectedProduct && showCheckout && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center px-4">
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
-              exit={{ opacity: 0 }}
               onClick={() => setShowCheckout(false)}
-              className="absolute inset-0 bg-black/95 backdrop-blur-md"
+              className="absolute inset-0 bg-black/98 backdrop-blur-xl"
             />
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-zinc-950 border border-brand-accent/20 rounded-[3rem] p-10 text-center shadow-[0_0_50px_rgba(16,185,129,0.1)]"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative w-full max-w-md bg-brand-bg border border-brand-accent/20 p-12 text-center"
             >
-              <h2 className="text-2xl font-bold mb-2">Checkout</h2>
-              <p className="text-zinc-500 text-sm mb-8 px-4">Follow the steps below to complete your order for <span className="text-white font-bold">{selectedProduct.name}</span></p>
-
-              <div className="space-y-4 mb-10 text-left">
-                <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                  <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Nagad (Personal)</p>
-                  <p className="font-mono text-orange-400 font-bold text-lg">{config.nagad || 'Update in Admin'}</p>
+              <div className="mb-10">
+                <span className="text-[10px] font-mono font-bold text-brand-accent uppercase tracking-widest block mb-4">Secure_Checkout</span>
+                <h2 className="text-3xl font-serif italic font-black uppercase tracking-tighter">Order_Protocol</h2>
+              </div>
+              
+              <div className="space-y-4 mb-12">
+                <div className="p-6 bg-white/[0.02] border border-white/5 flex flex-col items-center">
+                  <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">Nagad_Gateway</span>
+                  <span className="text-xl font-mono font-bold text-brand-accent tracking-tighter">{config.nagad || 'UNCONFIGURED'}</span>
                 </div>
-
-                <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                  <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Binance ID</p>
-                  <p className="font-mono text-yellow-400 font-bold text-lg">{config.binancePayId || 'Update in Admin'}</p>
+                <div className="p-6 bg-white/[0.02] border border-white/5 flex flex-col items-center">
+                  <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">Binance_ID</span>
+                  <span className="text-xl font-mono font-bold text-brand-accent tracking-tighter">{config.binancePayId || 'UNCONFIGURED'}</span>
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <button 
-                  onClick={() => openWhatsApp(selectedProduct, true)}
-                  className="w-full py-5 bg-brand-accent text-brand-bg rounded-[1.5rem] font-bold hover:scale-[1.02] transition-all flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/10"
-                >
-                  <MessageCircle size={20} /> I have Paid (WhatsApp)
-                </button>
-                <div className="h-px bg-white/5 mx-10 mt-4" />
-                <button 
-                  onClick={() => openWhatsApp(selectedProduct)}
-                  className="w-full py-3 text-zinc-400 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2"
-                >
-                  Contact on WhatsApp First
-                </button>
-                <button 
-                  onClick={() => setShowCheckout(false)}
-                  className="text-zinc-600 text-[10px] uppercase font-bold hover:text-zinc-400"
-                >
-                  Back to Details
-                </button>
-              </div>
+              <button 
+                onClick={() => openWhatsApp(selectedProduct, true)}
+                className="w-full py-5 bg-brand-accent text-brand-bg font-black uppercase tracking-widest text-[10px] hover:bg-white transition-all mb-4"
+              >
+                Confirm_Payment_Via_WhatsApp
+              </button>
+              <button 
+                onClick={() => setShowCheckout(false)}
+                className="text-zinc-600 text-[10px] font-black uppercase tracking-widest hover:text-zinc-400 underline underline-offset-8 decoration-zinc-800"
+              >
+                Abort_Transaction
+              </button>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
 
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-12 gap-8">
-          <div className="col-span-12 lg:col-span-4">
-            <h2 className="text-4xl font-bold tracking-tight mb-6">Future Roadmaps</h2>
-            <ul className="space-y-6 text-zinc-400">
-              <li className="flex gap-4 items-start">
-                <span className="text-brand-accent mt-1">●</span>
-                <div>
-                  <h4 className="text-white font-bold text-sm uppercase tracking-wider">Advanced Scalping Course</h4>
-                  <p className="text-xs">Coming this November.</p>
-                </div>
-              </li>
-              <li className="flex gap-4 items-start">
-                <span className="text-brand-accent mt-1">●</span>
-                <div>
-                  <h4 className="text-white font-bold text-sm uppercase tracking-wider">Custom RSI Indicator</h4>
-                  <p className="text-xs">Proprietary algorithm-based tools.</p>
-                </div>
-              </li>
-              <li className="flex gap-4 items-start">
-                <span className="text-brand-accent mt-1">●</span>
-                <div>
-                  <h4 className="text-white font-bold text-sm uppercase tracking-wider">One-to-One Mentorship</h4>
-                  <p className="text-xs">Personal guidance to master the markets.</p>
-                </div>
-              </li>
-            </ul>
+        <div className="grid grid-cols-12 gap-20">
+          <div className="col-span-12 lg:col-span-5">
+            <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-6">Marketplace</p>
+            <h2 className="text-5xl md:text-7xl font-serif italic font-black leading-tight tracking-tighter mb-12">
+              Surgical <span className="text-brand-accent">Tools</span> & Mentorship.
+            </h2>
+            
+            <div className="space-y-12 mb-12">
+              <div className="group">
+                <h4 className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest mb-4 group-hover:text-brand-accent transition-colors flex items-center gap-3">
+                  <span className="w-8 h-px bg-zinc-800 group-hover:bg-brand-accent transition-colors" /> Project_Titan
+                </h4>
+                <p className="text-zinc-400 text-sm leading-relaxed font-light">Advanced SMC Mentorship program launching in Q4 2024. Practical algorithmic trading focus.</p>
+              </div>
+              <div className="group">
+                <h4 className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest mb-4 group-hover:text-brand-accent transition-colors flex items-center gap-3">
+                  <span className="w-8 h-px bg-zinc-800 group-hover:bg-brand-accent transition-colors" /> Algo_Vision
+                </h4>
+                <p className="text-zinc-400 text-sm leading-relaxed font-light">Custom developed technical indicators designed for the MetaTrader 5 ecosystem. High accuracy bias.</p>
+              </div>
+            </div>
 
-            <div className="mt-12 p-6 bg-brand-accent/5 rounded border border-brand-accent/20 text-center">
-              <p className="text-[10px] mb-2 uppercase tracking-[0.2em] font-bold text-zinc-500">Stay Tuned</p>
-              <p className="text-brand-accent font-bold uppercase tracking-[0.2em]">Premium Tools Loading</p>
+            <div className="p-10 border border-white/5 bg-white/[0.01] relative overflow-hidden group hover:border-brand-accent/20 transition-all">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-brand-accent/5 blur-3xl rounded-full" />
+              <p className="text-[10px] font-mono font-bold text-zinc-600 uppercase tracking-[0.3em] mb-4">Elite_Access</p>
+              <h4 className="text-xl font-bold mb-4 uppercase tracking-tighter">Request_Custom_Consultancy</h4>
+              <button 
+                onClick={() => window.open(`https://wa.me/${config.whatsapp?.replace(/\D/g, '')}`, '_blank')}
+                className="text-brand-accent text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all"
+              >
+                Connect_Now <ArrowRight size={14} />
+              </button>
             </div>
           </div>
 
-          <div className="col-span-12 lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="col-span-12 lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8">
             {products.map((product) => (
               <motion.div
-                initial={{ opacity: 0, scale: 0.98 }}
-                whileInView={{ opacity: 1, scale: 1 }}
                 key={product.id}
-                className="card flex flex-col justify-between"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="group relative flex flex-col"
               >
-                <div>
-                  <div className="flex justify-between items-start mb-8">
-                    <div className="w-full h-48 bg-zinc-900 rounded-lg overflow-hidden border border-white/5">
-                      {product.image ? (
-                        <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-brand-accent">
-                          <ShoppingCart size={40} strokeWidth={1} />
-                        </div>
-                      )}
+                <div className="relative aspect-square bg-zinc-900 border border-white/5 overflow-hidden mb-8">
+                  {product.image ? (
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-zinc-800">
+                      <ShoppingCart size={80} strokeWidth={0.5} />
                     </div>
-                  </div>
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="bg-zinc-800 text-zinc-500 text-[9px] px-2 py-1 rounded font-bold uppercase tracking-widest border border-white/5 flex items-center gap-2">
-                      <Lock size={8} /> Coming Soon
+                  )}
+                  <div className="absolute top-6 left-6">
+                    <span className="bg-brand-bg/80 backdrop-blur-md border border-white/10 text-white text-[9px] px-3 py-1.5 font-mono font-bold uppercase tracking-widest flex items-center gap-2">
+                       {product.status === 'coming_soon' ? <Lock size={10} /> : null}
+                       {product.status?.replace('_', ' ')}
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold mb-3">{product.name}</h3>
-                  <p className="text-sm text-zinc-500 leading-relaxed mb-8">
+                </div>
+
+                <div className="flex-1">
+                  <h3 className="text-2xl font-serif italic font-black uppercase tracking-tighter mb-4 group-hover:text-brand-accent transition-colors">{product.name}</h3>
+                  <p className="text-zinc-500 text-sm font-light leading-relaxed mb-8 line-clamp-3">
                     {product.description}
                   </p>
                 </div>
-                <div className="flex gap-4">
+
+                <div className="flex gap-4 pt-8 border-t border-white/5">
                   <button 
-                    onClick={() => { setSelectedProduct(product); setShowCheckout(true); }}
-                    className="btn-outline flex-1 bg-brand-accent/10 border-brand-accent/20 text-brand-accent text-center py-2 rounded-lg text-sm font-bold block"
+                    onClick={() => setSelectedProduct(product)}
+                    className="flex-1 text-[10px] font-black uppercase tracking-widest border border-brand-accent/30 text-brand-accent py-4 hover:bg-brand-accent hover:text-brand-bg transition-all"
                   >
-                    Buy Now
+                    View_Spec
                   </button>
                   <button 
-                    onClick={() => { setSelectedProduct(product); setShowCheckout(false); }}
-                    className="btn-outline flex-1 bg-transparent py-2 rounded-lg text-sm text-zinc-500 border-white/5"
+                    onClick={() => { setSelectedProduct(product); setShowCheckout(true); }}
+                    className="flex-1 text-[10px] font-black uppercase tracking-widest bg-brand-accent text-brand-bg py-4 hover:bg-white transition-all shadow-lg shadow-brand-accent/10"
                   >
-                    Details
+                    Acquire
                   </button>
                 </div>
               </motion.div>

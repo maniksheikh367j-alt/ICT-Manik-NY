@@ -1,62 +1,55 @@
 import { motion } from 'motion/react';
 import { useSiteData } from '../context/SiteContext';
-import { cn } from '../lib/utils';
 
 export default function StorySection() {
   const { story, config } = useSiteData();
   
   return (
-    <section id="story" className="py-24 px-6 bg-zinc-950/50">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">{config.storyTitle}</h2>
-          <p className="text-zinc-500 italic font-serif">
-            "{config.storyQuote}"
-          </p>
+    <section id="story" className="py-32 px-6 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-px bg-white/5" />
+      <div className="max-w-5xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-32">
+          <div className="max-w-2xl">
+            <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-4">The Evolution</p>
+            <h2 className="text-5xl md:text-7xl font-serif italic font-black leading-tight tracking-tighter">
+              {config.storyTitle}
+            </h2>
+          </div>
+          <div className="max-w-xs">
+             <p className="text-zinc-500 text-sm font-light leading-relaxed border-l border-brand-accent/30 pl-6 italic">
+              "{config.storyQuote}"
+            </p>
+          </div>
         </div>
 
-        <div className="relative pl-8 md:pl-0">
-          {/* Timeline center line */}
-          <div className="absolute left-[39px] md:left-1/2 top-0 bottom-0 w-px bg-zinc-800 -translate-x-1/2" />
-
+        <div className="space-y-40">
           {story.map((point, index) => (
-            <div key={point.id} className={cn(
-              "relative mb-24 flex flex-col md:flex-row items-center",
-              index % 2 === 0 ? "md:flex-row-reverse" : ""
-            )}>
-              {/* Timeline marker */}
-              <div className="absolute left-[-1px] md:left-1/2 w-4 h-4 bg-emerald-500 rounded-full -translate-x-1/2 z-10 shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
-
-              <div className="md:w-1/2 px-12 text-left md:text-right">
-                {index % 2 !== 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    className="flex flex-col gap-2 md:items-end"
-                  >
-                    <span className="text-6xl font-bold text-zinc-900 font-mono leading-none">{point.year}</span>
-                    <h3 className="text-2xl font-bold">{point.title}</h3>
-                    <p className="text-zinc-500 leading-relaxed">{point.description}</p>
-                  </motion.div>
-                )}
+            <motion.div 
+              key={point.id}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start group"
+            >
+              <div className="md:col-span-3">
+                <span className="text-7xl md:text-9xl font-mono font-bold text-white/5 group-hover:text-brand-accent/10 transition-colors leading-none tracking-tighter">
+                  {point.year}
+                </span>
+              </div>
+              
+              <div className="md:col-span-1 hidden md:flex justify-center pt-8">
+                <div className="w-px h-full bg-white/5 relative">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-brand-accent" />
+                </div>
               </div>
 
-              <div className="md:w-1/2 px-12 text-left">
-                {index % 2 === 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    className="flex flex-col gap-2"
-                  >
-                    <span className="text-6xl font-bold text-zinc-900 font-mono leading-none">{point.year}</span>
-                    <h3 className="text-2xl font-bold">{point.title}</h3>
-                    <p className="text-zinc-500 leading-relaxed">{point.description}</p>
-                  </motion.div>
-                )}
+              <div className="md:col-span-8 pt-4 md:pt-8 opacity-60 group-hover:opacity-100 transition-opacity">
+                <h3 className="text-2xl md:text-3xl font-bold mb-6 tracking-tight font-sans uppercase">{point.title}</h3>
+                <p className="text-zinc-400 text-lg leading-relaxed max-w-2xl font-light">
+                  {point.description}
+                </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

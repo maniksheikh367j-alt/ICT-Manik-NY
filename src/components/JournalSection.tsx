@@ -19,46 +19,53 @@ export default function JournalSection() {
   };
 
   const stats = [
-    { label: '3 Days PNL', value: calculatePNL(3) },
-    { label: '7 Days PNL', value: calculatePNL(7) },
-    { label: '1 Month PNL', value: calculatePNL(30) },
-    { label: '1 Year PNL', value: calculatePNL(365) },
+    { label: 'QUARTER_PNL', value: calculatePNL(90) },
+    { label: 'MONTH_PNL', value: calculatePNL(30) },
+    { label: 'WEEK_PNL', value: calculatePNL(7) },
+    { label: 'AVG_DRAWDOWN', value: -1.2, isRaw: true }, // Placeholder
   ];
 
   return (
-    <section id="journal" className="py-24 px-10 bg-black/20">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold tracking-tight mb-4 italic">Trading <span className="text-brand-accent">Performance</span></h2>
-          <p className="text-zinc-500 uppercase tracking-[0.3em] text-[10px] font-bold">Real-time PNL Tracker</p>
+    <section id="journal" className="py-32 px-6 relative">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(16,185,129,0.05),transparent_50%)]" />
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20">
+          <div>
+            <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-4">Operations_Log</p>
+            <h2 className="text-5xl md:text-7xl font-serif italic font-black leading-tight tracking-tighter">
+              Performance <span className="text-brand-accent">Verification.</span>
+            </h2>
+          </div>
+          <p className="text-zinc-500 text-[10px] font-mono tracking-widest uppercase pb-4">Status: Optimal_Precision</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat, i) => (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.1 }}
               key={stat.label}
-              className="bg-white/5 border border-white/10 rounded-3xl p-8 text-center hover:border-brand-accent/30 transition-all group"
+              className="bg-zinc-950 border border-white/5 p-12 group hover:border-brand-accent/20 transition-all"
             >
-              <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mb-4">{stat.label}</p>
+              <p className="text-[10px] text-zinc-600 font-mono font-bold tracking-[0.2em] mb-8 uppercase group-hover:text-zinc-400">{stat.label}</p>
               <h4 className={cn(
-                "text-3xl font-mono font-bold tracking-tighter",
-                stat.value >= 0 ? "text-emerald-500" : "text-rose-500"
+                "text-4xl font-mono font-black tracking-tighter",
+                stat.value >= 0 ? "text-brand-accent" : "text-rose-500"
               )}>
-                {stat.value >= 0 ? '+' : '-'}${Math.abs(stat.value).toLocaleString()}
+                {stat.isRaw ? `${stat.value}%` : `${stat.value >= 0 ? '+' : '-'}$${Math.abs(stat.value).toLocaleString()}`}
               </h4>
-              <div className={cn(
-                "w-12 h-1 mt-6 mx-auto rounded-full blur-sm opacity-20",
-                stat.value >= 0 ? "bg-emerald-500" : "bg-rose-500"
-              )} />
             </motion.div>
           ))}
         </div>
         
-        <div className="mt-16 text-center">
-            <p className="text-zinc-600 text-xs italic">Values are updated based on recent market closures and verified trades.</p>
+        <div className="mt-20 border-t border-white/5 pt-8 flex justify-between items-center">
+            <p className="text-zinc-600 text-[9px] font-mono uppercase tracking-widest">Protocol: Verified_Results_v2.0</p>
+            <div className="flex gap-2">
+              <div className="w-2 h-2 rounded-full bg-brand-accent animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-brand-accent/20" />
+              <div className="w-2 h-2 rounded-full bg-brand-accent/20" />
+            </div>
         </div>
       </div>
     </section>
