@@ -18,7 +18,7 @@ function LandingPage() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'journal', 'story', 'store', 'contact'];
+      const sections = ['posts', 'journal', 'story', 'store', 'contact'];
       const scrollPos = window.scrollY + 100;
       for (const section of sections) {
         const element = document.getElementById(section);
@@ -40,9 +40,8 @@ function LandingPage() {
   };
 
   return (
-    <main className="bg-brand-bg min-h-screen text-brand-text">
+    <main className="bg-brand-bg min-h-screen text-brand-text pt-24">
       <Navbar activeSection={activeSection} onNavigate={scrollTo} />
-      <Hero onStart={() => scrollTo('journal')} />
       <PostSection />
       <JournalSection />
       <StorySection />

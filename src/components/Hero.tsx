@@ -14,42 +14,22 @@ export default function Hero({ onStart }: { onStart: () => void }) {
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-accent/5 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2" />
           
           <div className="relative z-10">
-            <div className="flex items-center gap-4 mb-10">
-              <span className="bg-brand-accent/10 border border-brand-accent/20 text-brand-accent text-[10px] px-4 py-1.5 rounded-full font-bold uppercase tracking-[0.2em]">
-                Verified Performance
-              </span>
-              <div className="h-[1px] w-12 bg-white/10" />
-              <span className="text-zinc-500 text-[10px] font-mono tracking-widest uppercase">Precision Trading</span>
-            </div>
-            
-            <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-10 leading-[0.9] tracking-tighter max-w-4xl font-black">
-              Trading is a <span className="text-brand-accent">Mind Game</span>, Not a Chart Game.
+            <h1 className="text-5xl sm:text-7xl md:text-9xl font-bold mb-10 leading-[0.85] tracking-tighter max-w-5xl font-black uppercase">
+              Trading is <br/><span className="text-brand-accent">Logic</span> Beyond Belief.
             </h1>
             
-            <p className="text-zinc-400 leading-relaxed text-xl max-w-2xl font-light">
-              Welcome to the official hub of <span className="text-white font-medium tracking-tight whitespace-nowrap">ICT MANIK NY</span>. Here I document my daily journey, surgical setups, and the psychological evolution of a retail trader becoming part of the smart money.
+            <p className="text-zinc-500 leading-relaxed text-xl max-w-2xl font-light">
+              Master the algorithmic flow of the markets with <span className="text-white font-medium">ICT MANIK NY</span>. We provide surgical precision tools and mentorship for the modern technical trader.
             </p>
           </div>
-
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-10 mt-16 relative z-10">
+          
+          <div className="mt-16 relative z-10">
             <button 
               onClick={onStart}
-              className="bg-brand-accent text-brand-bg px-10 py-5 rounded-none font-black uppercase tracking-[0.1em] text-sm hover:bg-white transition-all transform hover:-translate-y-1 active:translate-y-0 shadow-[0_10px_30px_rgba(16,185,129,0.2)]"
+              className="bg-brand-accent text-brand-bg px-12 py-6 rounded-none font-black uppercase tracking-[0.2em] text-xs hover:bg-white transition-all shadow-2xl shadow-brand-accent/20"
             >
-              Access Journal
+              Explore Course
             </button>
-            
-            <div className="flex items-center gap-6">
-              <div className="flex flex-col">
-                <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Consistency</span>
-                <span className="text-2xl font-mono font-bold">~84%</span>
-              </div>
-              <div className="w-[1px] h-10 bg-white/10" />
-              <div className="flex flex-col">
-                <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Methodology</span>
-                <span className="text-2xl font-mono font-bold">ICT/SMC</span>
-              </div>
-            </div>
           </div>
         </motion.div>
       </div>

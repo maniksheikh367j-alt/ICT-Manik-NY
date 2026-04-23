@@ -10,7 +10,6 @@ export default function Navbar({ activeSection, onNavigate }: { activeSection: s
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { id: 'home', label: 'Home' },
     { id: 'posts', label: 'Updates' },
     { id: 'journal', label: 'Performance' },
     { id: 'story', label: 'Journey' },
