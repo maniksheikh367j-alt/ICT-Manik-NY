@@ -11,6 +11,7 @@ export default function Hero({ onStart }: { onStart: () => void }) {
           className="col-span-12 card border-brand-accent/20 flex flex-col justify-between p-8 md:p-20 min-h-[500px] relative overflow-hidden group"
         >
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-accent/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-accent/5 blur-[100px] rounded-full translate-y-1/2 -translate-x-1/2" />
           
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-10">

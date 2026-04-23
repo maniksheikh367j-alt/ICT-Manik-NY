@@ -24,8 +24,6 @@ interface SiteConfig {
   telegram: string;
   whatsapp: string;
   tiktok: string;
-  nagad: string;
-  binancePayId: string;
   email: string;
   privacyPolicy: string;
   termsOfService: string;
@@ -59,13 +57,11 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     logoInitials: 'MN',
     logoImage: '',
     tagline: 'Precision Trading & Mentorship',
-    storyTitle: 'আমার ট্রেডিং জার্নি',
-    storyQuote: 'ট্রেডিং শুধু সংখ্যা নয়, এটি আত্মবিশ্বাসের লড়াই।',
+    storyTitle: 'The Dynamic Evolution.',
+    storyQuote: 'Trading is logic beyond belief.',
     telegram: 'https://t.me/maniksheikh',
     whatsapp: '+880XXXXXXXXX',
     tiktok: '',
-    nagad: '',
-    binancePayId: '',
     email: 'maniksheikh2006@gmail.com',
     privacyPolicy: '',
     termsOfService: ''

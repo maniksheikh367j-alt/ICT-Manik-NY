@@ -12,7 +12,7 @@ interface AuthContextType {
 }
 
 const ADMIN_EMAIL = 'maniksheikh2006@gmail.com';
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
+const ADMIN_PASSWORD = (import.meta as any).env.VITE_ADMIN_PASSWORD || 'admin123';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -60,10 +60,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return true;
       } catch (error: any) {
         console.error('Error signing in anonymously:', error);
-        if (error.code === 'auth/operation-not-allowed') {
-          alert('ERROR: Anonymous Authentication is disabled in Firebase Console. Please enable it in Authentication > Sign-in method.');
+        if (error.code === 'auth/operation-not-allowed' || error.code === 'auth/admin-restricted-operation') {
+          alert('ACTION REQUIRED: Anonymous Authentication is disabled or restricted in your Firebase Console.\n\nPlease follow these steps:\n1. Go to Firebase Console > Authentication > Sign-in method.\n2. Enable "Anonymous" provider.\n3. If you use Identity Platform, ensure "Enable create operation" is NOT blocked.');
         } else {
-          alert('LOGIN_ERROR: ' + error.message);
+          alert('LOGIN_ERROR: ' + (error.message || 'Unknown authentication error'));
         }
         return false;
       }

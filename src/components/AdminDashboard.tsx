@@ -230,21 +230,27 @@ export default function AdminDashboard() {
 
                 {activeTab === 'products' && (
                   <motion.div key="products" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <div className="flex justify-between items-center mb-12">
-                      <h2 className="text-sm font-mono font-bold text-brand-accent uppercase tracking-widest">Product Catalog</h2>
-                      <button onClick={handleAddProduct} className="px-6 py-2 bg-brand-accent text-brand-bg font-bold text-[10px] uppercase tracking-widest hover:bg-white transition-all">
-                        প্রোডাক্ট যোগ করুন (ADD PRODUCT)
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 gap-6">
+                      <div>
+                        <h2 className="text-xl font-bold text-brand-accent uppercase tracking-widest mb-1">Product Catalog</h2>
+                        <p className="text-[10px] text-zinc-500 uppercase tracking-widest">Manage your digital assets and courses</p>
+                      </div>
+                      <button 
+                        onClick={handleAddProduct} 
+                        className="w-full sm:w-auto px-8 py-3 bg-brand-accent text-brand-bg font-black text-[11px] uppercase tracking-widest hover:bg-white transition-all flex items-center justify-center gap-2"
+                      >
+                        <Plus size={16} /> ADD NEW PRODUCT
                       </button>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       {products.map((product) => (
-                        <div key={product.id} className="p-6 border border-white/5 bg-white/[0.02] space-y-4">
-                          <div className="group relative aspect-video bg-zinc-900 border border-white/5 mb-4 overflow-hidden">
+                        <div key={product.id} className="p-8 border border-white/5 bg-white/[0.02] flex flex-col group relative">
+                          <div className="relative aspect-video bg-zinc-900 border border-white/5 mb-6 overflow-hidden">
                             {product.image ? (
-                              <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+                              <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-zinc-800 text-[10px] uppercase font-bold tracking-widest">No Visual</div>
+                              <div className="w-full h-full flex items-center justify-center text-zinc-800 text-[10px] uppercase font-bold tracking-[0.5em]">No_Visual</div>
                             )}
                             <input type="file" accept="image/*" className="hidden" id={`prod-img-${product.id}`} onChange={(e) => {
                               const file = e.target.files?.[0];
@@ -254,25 +260,74 @@ export default function AdminDashboard() {
                                 reader.readAsDataURL(file);
                               }
                             }} />
-                            <label htmlFor={`prod-img-${product.id}`} className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[10px] font-bold uppercase tracking-widest cursor-pointer transition-opacity">
-                              Upload Image
+                            <label htmlFor={`prod-img-${product.id}`} className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-[10px] font-bold uppercase tracking-widest cursor-pointer transition-opacity backdrop-blur-sm">
+                              <Plus size={24} className="mb-2" />
+                              Update Media
                             </label>
                           </div>
 
-                          <div className="flex gap-2">
-                            <input className="bg-transparent border-none p-0 text-lg font-bold text-white outline-none flex-1" value={product.name} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, name: e.target.value} : p))} />
-                            <input className="bg-zinc-900 border border-zinc-800 px-2 py-1 text-[8px] font-mono text-brand-accent w-24 outline-none uppercase tracking-widest" placeholder="TYPE" value={product.type} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, type: e.target.value} : p))} />
-                          </div>
-                          <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-xs text-zinc-400 outline-none h-24" placeholder="Short description..." value={product.description} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, description: e.target.value} : p))} />
-                          <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-[10px] text-zinc-500 outline-none h-24" placeholder="Specifications (one per line)..." value={product.details || ''} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, details: e.target.value} : p))} />
-                          
-                          <div className="flex gap-4">
-                            <select className="bg-zinc-900 border border-zinc-800 text-[10px] p-2 outline-none flex-1" value={product.status} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, status: e.target.value as any} : p))}>
-                              <option value="available">AVAILABLE</option>
-                              <option value="coming_soon">COMING SOON</option>
-                              <option value="sold_out">SOLD OUT</option>
-                            </select>
-                            <button onClick={() => updateProducts(products.filter(p => p.id !== product.id))} className="px-4 py-2 bg-rose-500/10 text-rose-500 text-[10px] font-bold">DELETE</button>
+                          <div className="space-y-6">
+                            <div className="flex gap-4">
+                              <div className="flex-1 space-y-2">
+                                <label className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">Product Name</label>
+                                <input 
+                                  className="w-full bg-white/5 border border-white/10 px-4 py-3 text-sm font-bold text-white outline-none focus:border-brand-accent/30 transition-all" 
+                                  value={product.name} 
+                                  onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, name: e.target.value} : p))} 
+                                />
+                              </div>
+                              <div className="w-28 space-y-2">
+                                <label className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">Type</label>
+                                <input 
+                                  className="w-full bg-white/5 border border-white/10 px-4 py-3 text-[10px] font-mono text-brand-accent outline-none uppercase tracking-widest" 
+                                  placeholder="COURSE" 
+                                  value={product.type} 
+                                  onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, type: e.target.value} : p))} 
+                                />
+                              </div>
+                            </div>
+
+                            <div className="space-y-2">
+                              <label className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">Description</label>
+                              <textarea 
+                                className="w-full bg-white/5 border border-white/10 p-4 text-xs text-zinc-400 outline-none h-24 resize-none" 
+                                placeholder="Core value proposition..." 
+                                value={product.description} 
+                                onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, description: e.target.value} : p))} 
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <label className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">Specifications (List)</label>
+                              <textarea 
+                                className="w-full bg-white/5 border border-white/10 p-4 text-xs text-zinc-500 outline-none h-24 font-mono resize-none" 
+                                placeholder="Feature 1&#10;Feature 2..." 
+                                value={product.details || ''} 
+                                onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, details: e.target.value} : p))} 
+                              />
+                            </div>
+                            
+                            <div className="flex gap-4 pt-4">
+                              <select 
+                                className="flex-1 bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest p-3 outline-none cursor-pointer" 
+                                value={product.status} 
+                                onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, status: e.target.value as any} : p))}
+                              >
+                                <option value="available">🛒 AVAILABLE</option>
+                                <option value="coming_soon">⏳ COMING SOON</option>
+                                <option value="sold_out">🚫 SOLD OUT</option>
+                              </select>
+                              <button 
+                                onClick={() => {
+                                  if(confirm('Are you sure you want to delete this product?')) {
+                                    updateProducts(products.filter(p => p.id !== product.id))
+                                  }
+                                }} 
+                                className="px-5 py-3 bg-rose-500/10 text-rose-500 text-[10px] font-black uppercase tracking-widest border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all"
+                              >
+                                DELETE
+                              </button>
+                            </div>
                           </div>
                         </div>
                       ))}

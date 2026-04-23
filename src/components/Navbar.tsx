@@ -10,11 +10,11 @@ export default function Navbar({ activeSection, onNavigate }: { activeSection: s
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { id: 'home', label: 'হোম' },
-    { id: 'posts', label: 'আপডেট' },
-    { id: 'journal', label: 'পারফরম্যান্স' },
-    { id: 'story', label: 'বিবর্তন' },
-    { id: 'store', label: 'রিসোর্স' }
+    { id: 'home', label: 'Home' },
+    { id: 'posts', label: 'Updates' },
+    { id: 'journal', label: 'Performance' },
+    { id: 'story', label: 'Journey' },
+    { id: 'store', label: 'Store' }
   ];
 
   const handleMobileNav = (id: string) => {
@@ -64,7 +64,7 @@ export default function Navbar({ activeSection, onNavigate }: { activeSection: s
             onClick={() => onNavigate('store')} 
             className="hidden sm:block px-6 py-2 bg-brand-accent text-brand-bg text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-all shadow-lg shadow-brand-accent/5"
           >
-            কোর্স দেখুন
+            VIEW COURSES
           </button>
           <button 
             onClick={() => setIsOpen(!isOpen)}
@@ -109,7 +109,7 @@ export default function Navbar({ activeSection, onNavigate }: { activeSection: s
                   onClick={() => handleMobileNav('store')}
                   className="w-full bg-brand-accent text-brand-bg py-5 font-bold uppercase tracking-widest text-xs"
                 >
-                  কোর্স দেখুন
+                  VIEW COURSES
                 </button>
               </div>
             </div>

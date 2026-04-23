@@ -10,7 +10,7 @@ export default function StorySection() {
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-32">
           <div className="max-w-2xl">
-            <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-4">বিবর্তন</p>
+            <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-4">Evolution</p>
             <h2 className="text-5xl md:text-7xl font-sans font-black leading-tight tracking-tighter">
               {config.storyTitle}
             </h2>
