@@ -6,9 +6,15 @@ import { motion, AnimatePresence } from 'motion/react';
 
 export default function AdminDashboard() {
   const { logout } = useAuth();
-  const { logs, story, products, posts, config, updateLogs, updateStory, updateProducts, updatePosts, updateConfig, loading } = useSiteData();
+  const { logs, story, products, posts, config, updateLogs, updateStory, updateProducts, updatePosts, updateConfig, saveAll, loading } = useSiteData();
   const [activeTab, setActiveTab] = useState<'journal' | 'story' | 'products' | 'posts' | 'settings' | 'policies'>('journal');
   const [isSaving, setIsSaving] = useState(false);
+
+  const handleManualSync = async () => {
+    setIsSaving(true);
+    await saveAll();
+    setIsSaving(false);
+  };
 
   const handleAddPost = async () => {
     const newPost = {
@@ -77,7 +83,13 @@ export default function AdminDashboard() {
             <p className="text-zinc-500 text-[10px] tracking-widest uppercase">Admin: ICT MANIK NY</p>
           </div>
           <div className="flex items-center justify-between w-full sm:w-auto gap-6 border-t sm:border-t-0 border-white/5 pt-6 sm:pt-0">
-            {isSaving && <span className="text-[10px] font-mono text-brand-accent animate-pulse">SAVING...</span>}
+            <button 
+              onClick={handleManualSync}
+              disabled={isSaving}
+              className="flex items-center gap-2 px-6 py-2 bg-brand-accent text-brand-bg text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all shadow-lg shadow-brand-accent/20 disabled:opacity-50"
+            >
+              <Save size={14} /> {isSaving ? 'SYNCING...' : 'SYNC TO CLOUD'}
+            </button>
             <button 
               onClick={() => { logout(); window.location.href = '/'; }}
               className="px-4 py-2 bg-white/5 text-zinc-400 border border-white/10 hover:bg-rose-500 hover:text-white transition-all text-[10px] font-bold uppercase tracking-widest"
@@ -110,17 +122,17 @@ export default function AdminDashboard() {
                         <SectionHeader title="Branding" />
                         <div className="space-y-4">
                           <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Logo Name</label>
-                          <input className="input-field" value={config.logoName} onChange={(e) => handleUpdateConfig({...config, logoName: e.target.value})} />
+                          <input className="input-field" value={config.logoName} onChange={(e) => updateConfig({...config, logoName: e.target.value}, false)} />
                         </div>
                         <div className="space-y-4">
                           <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Logo Image URL</label>
                           <div className="flex gap-2">
-                            <input className="input-field flex-1" value={config.logoImage || ''} onChange={(e) => handleUpdateConfig({...config, logoImage: e.target.value})} />
+                            <input className="input-field flex-1" value={config.logoImage || ''} onChange={(e) => updateConfig({...config, logoImage: e.target.value}, false)} />
                             <input type="file" accept="image/*" className="hidden" id="logo-upload" onChange={(e) => {
                               const file = e.target.files?.[0];
                               if (file) {
                                 const reader = new FileReader();
-                                reader.onloadend = () => handleUpdateConfig({...config, logoImage: reader.result as string});
+                                reader.onloadend = () => updateConfig({...config, logoImage: reader.result as string}, false);
                                 reader.readAsDataURL(file);
                               }
                             }} />
@@ -129,15 +141,15 @@ export default function AdminDashboard() {
                         </div>
                         <div className="space-y-4">
                           <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">TikTok Profile Link</label>
-                          <input className="input-field" placeholder="https://tiktok.com/@yourprofile" value={config.tiktok || ''} onChange={(e) => handleUpdateConfig({...config, tiktok: e.target.value})} />
+                          <input className="input-field" placeholder="https://tiktok.com/@yourprofile" value={config.tiktok || ''} onChange={(e) => updateConfig({...config, tiktok: e.target.value}, false)} />
                         </div>
                         <div className="space-y-4">
                           <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Initials</label>
-                          <input className="input-field w-24" maxLength={3} value={config.logoInitials} onChange={(e) => handleUpdateConfig({...config, logoInitials: e.target.value.toUpperCase()})} />
+                          <input className="input-field w-24" maxLength={3} value={config.logoInitials} onChange={(e) => updateConfig({...config, logoInitials: e.target.value.toUpperCase()}, false)} />
                         </div>
                         <div className="space-y-4">
                           <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Tagline</label>
-                          <input className="input-field" value={config.tagline} onChange={(e) => handleUpdateConfig({...config, tagline: e.target.value})} />
+                          <input className="input-field" value={config.tagline} onChange={(e) => updateConfig({...config, tagline: e.target.value}, false)} />
                         </div>
                       </div>
 
@@ -145,15 +157,15 @@ export default function AdminDashboard() {
                         <SectionHeader title="Links & Contacts" />
                         <div className="space-y-4">
                           <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Telegram ID</label>
-                          <input className="input-field" value={config.telegram} onChange={(e) => handleUpdateConfig({...config, telegram: e.target.value})} />
+                          <input className="input-field" value={config.telegram} onChange={(e) => updateConfig({...config, telegram: e.target.value}, false)} />
                         </div>
                         <div className="space-y-4">
                           <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">WhatsApp Link</label>
-                          <input className="input-field" value={config.whatsapp} onChange={(e) => handleUpdateConfig({...config, whatsapp: e.target.value})} />
+                          <input className="input-field" value={config.whatsapp} onChange={(e) => updateConfig({...config, whatsapp: e.target.value}, false)} />
                         </div>
                         <div className="space-y-4">
                           <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Official Email</label>
-                          <input className="input-field" value={config.email} onChange={(e) => handleUpdateConfig({...config, email: e.target.value})} />
+                          <input className="input-field" value={config.email} onChange={(e) => updateConfig({...config, email: e.target.value}, false)} />
                         </div>
                       </div>
                     </div>
@@ -173,19 +185,19 @@ export default function AdminDashboard() {
                       {logs.map((log) => (
                         <div key={log.id} className="grid grid-cols-12 gap-4 p-4 border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-all group">
                           <div className="col-span-3">
-                            <input type="date" className="bg-transparent border-none text-xs font-mono text-zinc-400 outline-none w-full" value={log.date} onChange={(e) => updateLogs(logs.map(l => l.id === log.id ? {...l, date: e.target.value} : l))} />
+                            <input type="date" className="bg-transparent border-none text-xs font-mono text-zinc-400 outline-none w-full" value={log.date} onChange={(e) => updateLogs(logs.map(l => l.id === log.id ? {...l, date: e.target.value} : l), false)} />
                           </div>
                           <div className="col-span-3">
-                            <input className="bg-transparent border-none text-xs font-mono text-white outline-none w-full" value={log.pair} onChange={(e) => updateLogs(logs.map(l => l.id === log.id ? {...l, pair: e.target.value} : l))} />
+                            <input className="bg-transparent border-none text-xs font-mono text-white outline-none w-full" value={log.pair} onChange={(e) => updateLogs(logs.map(l => l.id === log.id ? {...l, pair: e.target.value} : l), false)} />
                           </div>
                           <div className="col-span-2">
                             <div className="flex items-center gap-1">
                               <span className="text-[10px] text-zinc-600 font-mono italic">$</span>
-                              <input type="number" className="bg-transparent border-none text-xs font-mono text-white outline-none w-full" value={log.amount || 0} onChange={(e) => updateLogs(logs.map(l => l.id === log.id ? {...l, amount: parseFloat(e.target.value)} : l))} />
+                              <input type="number" className="bg-transparent border-none text-xs font-mono text-white outline-none w-full" value={log.amount || 0} onChange={(e) => updateLogs(logs.map(l => l.id === log.id ? {...l, amount: parseFloat(e.target.value)} : l), false)} />
                             </div>
                           </div>
                           <div className="col-span-3">
-                            <select className="bg-transparent border-none text-[10px] font-mono uppercase tracking-widest outline-none w-full cursor-pointer" value={log.status} onChange={(e) => updateLogs(logs.map(l => l.id === log.id ? {...l, status: e.target.value as any} : l))}>
+                            <select className="bg-transparent border-none text-[10px] font-mono uppercase tracking-widest outline-none w-full cursor-pointer" value={log.status} onChange={(e) => updateLogs(logs.map(l => l.id === log.id ? {...l, status: e.target.value as any} : l), false)}>
                               <option value="profit" className="text-emerald-500">PROFIT</option>
                               <option value="loss" className="text-rose-500">LOSS</option>
                               <option value="breakeven">BREAKEVEN</option>
@@ -215,13 +227,13 @@ export default function AdminDashboard() {
                       {story.map((point) => (
                         <div key={point.id} className="p-6 border border-white/5 bg-white/[0.02] space-y-4">
                           <div className="flex gap-4">
-                            <input className="bg-transparent border-zinc-800 border px-3 py-2 text-xs font-mono text-brand-accent w-24 outline-none" value={point.year} onChange={(e) => updateStory(story.map(s => s.id === point.id ? {...s, year: e.target.value} : s))} />
-                            <input className="bg-transparent border-zinc-800 border px-3 py-2 text-sm font-bold text-white flex-1 outline-none" value={point.title} onChange={(e) => updateStory(story.map(s => s.id === point.id ? {...s, title: e.target.value} : s))} />
-                            <button onClick={() => updateStory(story.filter(s => s.id !== point.id))} className="text-rose-500">
+                            <input className="bg-transparent border-zinc-800 border px-3 py-2 text-xs font-mono text-brand-accent w-24 outline-none" value={point.year} onChange={(e) => updateStory(story.map(s => s.id === point.id ? {...s, year: e.target.value} : s), false)} />
+                            <input className="bg-transparent border-zinc-800 border px-3 py-2 text-sm font-bold text-white flex-1 outline-none" value={point.title} onChange={(e) => updateStory(story.map(s => s.id === point.id ? {...s, title: e.target.value} : s), false)} />
+                            <button onClick={() => updateStory(story.filter(s => s.id !== point.id), false)} className="text-rose-500">
                               <Trash2 size={16} />
                             </button>
                           </div>
-                          <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-xs text-zinc-400 outline-none h-24" value={point.description} onChange={(e) => updateStory(story.map(s => s.id === point.id ? {...s, description: e.target.value} : s))} />
+                          <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-xs text-zinc-400 outline-none h-24" value={point.description} onChange={(e) => updateStory(story.map(s => s.id === point.id ? {...s, description: e.target.value} : s), false)} />
                         </div>
                       ))}
                     </div>
@@ -273,7 +285,7 @@ export default function AdminDashboard() {
                                 <input 
                                   className="w-full bg-white/5 border border-white/10 px-4 py-3 text-sm font-bold text-white outline-none focus:border-brand-accent/30 transition-all" 
                                   value={product.name} 
-                                  onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, name: e.target.value} : p))} 
+                                  onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, name: e.target.value} : p), false)} 
                                 />
                               </div>
                               <div className="w-28 space-y-2">
@@ -282,7 +294,7 @@ export default function AdminDashboard() {
                                   className="w-full bg-white/5 border border-white/10 px-4 py-3 text-[10px] font-mono text-brand-accent outline-none uppercase tracking-widest" 
                                   placeholder="COURSE" 
                                   value={product.type} 
-                                  onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, type: e.target.value} : p))} 
+                                  onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, type: e.target.value} : p), false)} 
                                 />
                               </div>
                             </div>
@@ -293,7 +305,7 @@ export default function AdminDashboard() {
                                 className="w-full bg-white/5 border border-white/10 p-4 text-xs text-zinc-400 outline-none h-24 resize-none" 
                                 placeholder="Core value proposition..." 
                                 value={product.description} 
-                                onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, description: e.target.value} : p))} 
+                                onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, description: e.target.value} : p), false)} 
                               />
                             </div>
 
@@ -303,7 +315,7 @@ export default function AdminDashboard() {
                                 className="w-full bg-white/5 border border-white/10 p-4 text-xs text-zinc-500 outline-none h-24 font-mono resize-none" 
                                 placeholder="Feature 1&#10;Feature 2..." 
                                 value={product.details || ''} 
-                                onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, details: e.target.value} : p))} 
+                                onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, details: e.target.value} : p), false)} 
                               />
                             </div>
                             
@@ -311,7 +323,7 @@ export default function AdminDashboard() {
                               <select 
                                 className="flex-1 bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest p-3 outline-none cursor-pointer" 
                                 value={product.status} 
-                                onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, status: e.target.value as any} : p))}
+                                onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, status: e.target.value as any} : p), false)}
                               >
                                 <option value="available">🛒 AVAILABLE</option>
                                 <option value="coming_soon">⏳ COMING SOON</option>
@@ -320,7 +332,7 @@ export default function AdminDashboard() {
                               <button 
                                 onClick={() => {
                                   if(confirm('Are you sure you want to delete this product?')) {
-                                    updateProducts(products.filter(p => p.id !== product.id))
+                                    updateProducts(products.filter(p => p.id !== product.id), false)
                                   }
                                 }} 
                                 className="px-5 py-3 bg-rose-500/10 text-rose-500 text-[10px] font-black uppercase tracking-widest border border-rose-500/20 hover:bg-rose-500 hover:text-white transition-all"
@@ -348,11 +360,11 @@ export default function AdminDashboard() {
                       {posts.map((post) => (
                         <div key={post.id} className="p-8 border border-white/10 bg-white/[0.01] space-y-6">
                           <div className="flex justify-between gap-8 items-start">
-                            <input className="bg-transparent border-none p-0 text-xl font-bold text-white outline-none flex-1 placeholder:text-zinc-800" placeholder="Post Title..." value={post.title} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, title: e.target.value} : p))} />
-                            <input type="date" className="bg-white/5 border border-white/10 rounded-none px-4 py-2 text-[10px] font-mono text-zinc-400 outline-none" value={post.date} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, date: e.target.value} : p))} />
+                            <input className="bg-transparent border-none p-0 text-xl font-bold text-white outline-none flex-1 placeholder:text-zinc-800" placeholder="Post Title..." value={post.title} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, title: e.target.value} : p), false)} />
+                            <input type="date" className="bg-white/5 border border-white/10 rounded-none px-4 py-2 text-[10px] font-mono text-zinc-400 outline-none" value={post.date} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, date: e.target.value} : p), false)} />
                           </div>
                           
-                          <textarea className="w-full bg-white/[0.02] border border-white/5 p-6 text-sm text-zinc-400 outline-none h-64 focus:border-brand-accent/20 transition-all font-light leading-relaxed" placeholder="Write Market Insights Here..." value={post.content} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, content: e.target.value} : p))} />
+                          <textarea className="w-full bg-white/[0.02] border border-white/5 p-6 text-sm text-zinc-400 outline-none h-64 focus:border-brand-accent/20 transition-all font-light leading-relaxed" placeholder="Write Market Insights Here..." value={post.content} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, content: e.target.value} : p), false)} />
                           
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-4">
@@ -360,16 +372,16 @@ export default function AdminDashboard() {
                                 const file = e.target.files?.[0];
                                 if (file) {
                                   const reader = new FileReader();
-                                  reader.onloadend = () => updatePosts(posts.map(p => p.id === post.id ? {...p, image: reader.result as string} : p));
+                                  reader.onloadend = () => updatePosts(posts.map(p => p.id === post.id ? {...p, image: reader.result as string} : p), false);
                                   reader.readAsDataURL(file);
                                 }
                               }} />
                               <label htmlFor={`img-${post.id}`} className="text-[10px] font-bold uppercase tracking-widest text-brand-accent cursor-pointer hover:text-white transition-colors">
                                 {post.image ? 'CHANGE VISUAL' : 'UPLOAD VISUAL'}
                               </label>
-                              {post.image && <button onClick={() => updatePosts(posts.map(p => p.id === post.id ? {...p, image: ''} : p))} className="text-rose-500 text-[10px] uppercase font-bold tracking-widest">REMOVE</button>}
+                              {post.image && <button onClick={() => updatePosts(posts.map(p => p.id === post.id ? {...p, image: ''} : p), false)} className="text-rose-500 text-[10px] uppercase font-bold tracking-widest">REMOVE</button>}
                             </div>
-                            <button onClick={() => updatePosts(posts.filter(p => p.id !== post.id))} className="text-zinc-600 hover:text-rose-500 transition-colors text-[10px] uppercase font-bold tracking-widest">DELETE POST</button>
+                            <button onClick={() => updatePosts(posts.filter(p => p.id !== post.id), false)} className="text-zinc-600 hover:text-rose-500 transition-colors text-[10px] uppercase font-bold tracking-widest">DELETE POST</button>
                           </div>
                         </div>
                       ))}
@@ -386,7 +398,7 @@ export default function AdminDashboard() {
                         <textarea 
                           className="w-full bg-white/[0.02] border border-white/5 p-6 text-sm text-zinc-400 outline-none h-96 focus:border-brand-accent/20 transition-all font-mono" 
                           value={config.privacyPolicy || ''} 
-                          onChange={(e) => handleUpdateConfig({...config, privacyPolicy: e.target.value})} 
+                          onChange={(e) => updateConfig({...config, privacyPolicy: e.target.value}, false)} 
                           placeholder="Enter privacy policy text..."
                         />
                       </div>
@@ -395,7 +407,7 @@ export default function AdminDashboard() {
                         <textarea 
                           className="w-full bg-white/[0.02] border border-white/5 p-6 text-sm text-zinc-400 outline-none h-96 focus:border-brand-accent/20 transition-all font-mono" 
                           value={config.termsOfService || ''} 
-                          onChange={(e) => handleUpdateConfig({...config, termsOfService: e.target.value})} 
+                          onChange={(e) => updateConfig({...config, termsOfService: e.target.value}, false)} 
                           placeholder="Enter terms of service text..."
                         />
                       </div>

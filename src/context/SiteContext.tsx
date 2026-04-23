@@ -36,11 +36,12 @@ interface SiteDataContextType {
   posts: BlogPost[];
   config: SiteConfig;
   loading: boolean;
-  updateLogs: (logs: TradingLog[]) => Promise<void>;
-  updateStory: (story: StoryPoint[]) => Promise<void>;
-  updateProducts: (products: Product[]) => Promise<void>;
-  updatePosts: (posts: BlogPost[]) => Promise<void>;
-  updateConfig: (config: SiteConfig) => Promise<void>;
+  updateLogs: (logs: TradingLog[], sync?: boolean) => Promise<void>;
+  updateStory: (story: StoryPoint[], sync?: boolean) => Promise<void>;
+  updateProducts: (products: Product[], sync?: boolean) => Promise<void>;
+  updatePosts: (posts: BlogPost[], sync?: boolean) => Promise<void>;
+  updateConfig: (config: SiteConfig, sync?: boolean) => Promise<void>;
+  saveAll: () => Promise<void>;
 }
 
 const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined);
@@ -114,55 +115,86 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     // Note: The dashboard UI passes the entire array to these update functions.
   };
 
-  const updateLogs = async (newLogs: TradingLog[]) => {
-    // Basic sync logic: if it has an ID and changed, update. If new, add.
-    // To keep it simple for the AI Studio preview and match the existing Dashboard logic:
-    for (const log of newLogs) {
-      const { id, ...data } = log;
-      await setDoc(doc(db, 'logs', id), data);
+  const handleFirestoreError = (error: any, operation: string) => {
+    console.error(`Firestore Error [${operation}]:`, error);
+    if (error.code === 'resource-exhausted') {
+      alert('QUOTA_EXCEEDED: Your Firebase free tier limit has been reached for today. Changes will be saved locally but might not sync to the cloud until tomorrow.');
+    } else if (error.code === 'permission-denied') {
+      alert('PERMISSION_DENIED: You do not have authority to write to this database. Please check your login status.');
+    } else {
+      alert(`SYNC_ERROR: ${error.message || 'Unknown error during synchronization'}`);
     }
-    // Delete logic (if any log was removed from the array)
-    const newIds = new Set(newLogs.map(l => l.id));
-    logs.forEach(async l => {
-      if (!newIds.has(l.id)) await deleteDoc(doc(db, 'logs', l.id));
-    });
   };
 
-  const updateStory = async (newStory: StoryPoint[]) => {
-    for (const s of newStory) {
-      const { id, ...data } = s;
-      await setDoc(doc(db, 'stories', id), data);
+  const updateLogs = async (newLogs: TradingLog[], sync = false) => {
+    setLogs(newLogs);
+    if (sync) {
+      try {
+        for (const log of newLogs) {
+          const { id, ...data } = log;
+          await setDoc(doc(db, 'logs', id), data);
+        }
+      } catch (e) { handleFirestoreError(e, 'updateLogs'); }
     }
-    const newIds = new Set(newStory.map(s => s.id));
-    story.forEach(async s => {
-      if (!newIds.has(s.id)) await deleteDoc(doc(db, 'stories', s.id));
-    });
   };
 
-  const updateProducts = async (newProducts: Product[]) => {
-    for (const p of newProducts) {
-      const { id, ...data } = p;
-      await setDoc(doc(db, 'products', id), data);
+  const updateStory = async (newStory: StoryPoint[], sync = false) => {
+    setStory(newStory);
+    if (sync) {
+      try {
+        for (const s of newStory) {
+          const { id, ...data } = s;
+          await setDoc(doc(db, 'stories', id), data);
+        }
+      } catch (e) { handleFirestoreError(e, 'updateStory'); }
     }
-    const newIds = new Set(newProducts.map(p => p.id));
-    products.forEach(async p => {
-      if (!newIds.has(p.id)) await deleteDoc(doc(db, 'products', p.id));
-    });
   };
 
-  const updatePosts = async (newPosts: BlogPost[]) => {
-    for (const p of newPosts) {
-      const { id, ...data } = p;
-      await setDoc(doc(db, 'posts', id), data);
+  const updateProducts = async (newProducts: Product[], sync = false) => {
+    setProducts(newProducts);
+    if (sync) {
+      try {
+        for (const p of newProducts) {
+          const { id, ...data } = p;
+          await setDoc(doc(db, 'products', id), data);
+        }
+      } catch (e) { handleFirestoreError(e, 'updateProducts'); }
     }
-    const newIds = new Set(newPosts.map(p => p.id));
-    posts.forEach(async p => {
-      if (!newIds.has(p.id)) await deleteDoc(doc(db, 'posts', p.id));
-    });
   };
 
-  const updateConfig = async (newConfig: SiteConfig) => {
-    await setDoc(doc(db, 'config', 'settings'), newConfig);
+  const updatePosts = async (newPosts: BlogPost[], sync = false) => {
+    setPosts(newPosts);
+    if (sync) {
+      try {
+        for (const p of newPosts) {
+          const { id, ...data } = p;
+          await setDoc(doc(db, 'posts', id), data);
+        }
+      } catch (e) { handleFirestoreError(e, 'updatePosts'); }
+    }
+  };
+
+  const updateConfig = async (newConfig: SiteConfig, sync = false) => {
+    setConfig(newConfig);
+    if (sync) {
+      try {
+        await setDoc(doc(db, 'config', 'settings'), newConfig);
+      } catch (e) { handleFirestoreError(e, 'updateConfig'); }
+    }
+  };
+
+  const saveAll = async () => {
+    try {
+      // Sync all current states to Firestore
+      for (const log of logs) { await setDoc(doc(db, 'logs', log.id), log); }
+      for (const s of story) { await setDoc(doc(db, 'stories', s.id), s); }
+      for (const p of products) { await setDoc(doc(db, 'products', p.id), p); }
+      for (const p of posts) { await setDoc(doc(db, 'posts', p.id), p); }
+      await setDoc(doc(db, 'config', 'settings'), config);
+      alert('ALL_STREAMS_SYNCED_SUCCESSFULLY');
+    } catch (e) {
+      handleFirestoreError(e, 'saveAll');
+    }
   };
 
   return (
@@ -177,7 +209,8 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       updateStory, 
       updateProducts,
       updatePosts,
-      updateConfig
+      updateConfig,
+      saveAll
     }}>
       {children}
     </SiteDataContext.Provider>
