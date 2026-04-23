@@ -29,7 +29,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isAdmin = user?.email === ADMIN_EMAIL && user?.emailVerified;
 
   const login = async () => {
-    await loginWithGoogle();
+    try {
+      await loginWithGoogle();
+    } catch (error: any) {
+      if (error.code === 'auth/popup-closed-by-user') {
+        console.log('Login cancelled by user.');
+        return;
+      }
+      console.error('Error signing in with Google:', error);
+      throw error;
+    }
   };
 
   const logout = async () => {

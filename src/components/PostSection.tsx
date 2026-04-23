@@ -15,13 +15,13 @@ export default function PostSection() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-32">
           <div className="max-w-2xl">
-            <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-4">Intel_Stream</p>
-            <h2 className="text-5xl md:text-7xl font-serif italic font-black leading-tight tracking-tighter">
+            <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-4">Intel Stream</p>
+            <h2 className="text-5xl md:text-7xl font-bold leading-tight tracking-tighter uppercase">
               Daily <span className="text-brand-accent">Intelligence.</span>
             </h2>
           </div>
           <div className="flex items-center gap-4 text-zinc-500 font-mono text-[10px] uppercase tracking-widest border border-white/5 px-6 py-3">
-             <span className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-pulse" /> Live_Updates
+             <span className="w-1.5 h-1.5 bg-brand-accent rounded-full animate-pulse" /> Live Updates
           </div>
         </div>
 

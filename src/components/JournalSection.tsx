@@ -31,12 +31,12 @@ export default function JournalSection() {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20">
           <div>
-            <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-4">Operations_Log</p>
-            <h2 className="text-5xl md:text-7xl font-serif italic font-black leading-tight tracking-tighter">
+            <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-4">Operations Log</p>
+            <h2 className="text-5xl md:text-7xl font-bold leading-tight tracking-tighter uppercase">
               Performance <span className="text-brand-accent">Verification.</span>
             </h2>
           </div>
-          <p className="text-zinc-500 text-[10px] font-mono tracking-widest uppercase pb-4">Status: Optimal_Precision</p>
+          <p className="text-zinc-500 text-[10px] font-mono tracking-widest uppercase pb-4">Status: Optimal</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

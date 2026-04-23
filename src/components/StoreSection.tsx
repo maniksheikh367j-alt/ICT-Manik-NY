@@ -154,34 +154,34 @@ export default function StoreSection() {
         <div className="grid grid-cols-12 gap-20">
           <div className="col-span-12 lg:col-span-5">
             <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-6">Marketplace</p>
-            <h2 className="text-5xl md:text-7xl font-serif italic font-black leading-tight tracking-tighter mb-12">
+            <h2 className="text-5xl md:text-7xl font-bold leading-tight tracking-tighter mb-12 uppercase">
               Surgical <span className="text-brand-accent">Tools</span> & Mentorship.
             </h2>
             
             <div className="space-y-12 mb-12">
               <div className="group">
                 <h4 className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest mb-4 group-hover:text-brand-accent transition-colors flex items-center gap-3">
-                  <span className="w-8 h-px bg-zinc-800 group-hover:bg-brand-accent transition-colors" /> Project_Titan
+                  <span className="w-8 h-px bg-zinc-800 group-hover:bg-brand-accent transition-colors" /> Project Titan
                 </h4>
-                <p className="text-zinc-400 text-sm leading-relaxed font-light">Advanced SMC Mentorship program launching in Q4 2024. Practical algorithmic trading focus.</p>
+                <p className="text-zinc-400 text-sm leading-relaxed font-light">Advanced SMC Mentorship program focusing on algorithmic trading logic.</p>
               </div>
               <div className="group">
                 <h4 className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest mb-4 group-hover:text-brand-accent transition-colors flex items-center gap-3">
-                  <span className="w-8 h-px bg-zinc-800 group-hover:bg-brand-accent transition-colors" /> Algo_Vision
+                  <span className="w-8 h-px bg-zinc-800 group-hover:bg-brand-accent transition-colors" /> Algo Vision
                 </h4>
-                <p className="text-zinc-400 text-sm leading-relaxed font-light">Custom developed technical indicators designed for the MetaTrader 5 ecosystem. High accuracy bias.</p>
+                <p className="text-zinc-400 text-sm leading-relaxed font-light">Custom technical indicators designed for the MetaTrader 5 ecosystem.</p>
               </div>
             </div>
 
             <div className="p-10 border border-white/5 bg-white/[0.01] relative overflow-hidden group hover:border-brand-accent/20 transition-all">
               <div className="absolute top-0 right-0 w-24 h-24 bg-brand-accent/5 blur-3xl rounded-full" />
-              <p className="text-[10px] font-mono font-bold text-zinc-600 uppercase tracking-[0.3em] mb-4">Elite_Access</p>
-              <h4 className="text-xl font-bold mb-4 uppercase tracking-tighter">Request_Custom_Consultancy</h4>
+              <p className="text-[10px] font-mono font-bold text-zinc-600 uppercase tracking-[0.3em] mb-4">Elite Access</p>
+              <h4 className="text-xl font-bold mb-4 uppercase tracking-tighter">Request Consultancy</h4>
               <button 
                 onClick={() => window.open(`https://wa.me/${config.whatsapp?.replace(/\D/g, '')}`, '_blank')}
-                className="text-brand-accent text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all"
+                className="text-brand-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all"
               >
-                Connect_Now <ArrowRight size={14} />
+                Connect Now <ArrowRight size={14} />
               </button>
             </div>
           </div>

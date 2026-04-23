@@ -55,7 +55,7 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [loading, setLoading] = useState(true);
 
   const [config, setConfig] = useState<SiteConfig>({
-    logoName: '𝙄𝘾𝙏 𝙈𝘼𝙉𝙄𝙆 𝙉𝙔',
+    logoName: 'ICT MANIK NY',
     logoInitials: 'MN',
     logoImage: '',
     tagline: 'Precision Trading & Mentorship',

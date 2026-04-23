@@ -142,9 +142,9 @@ export default function AdminDashboard() {
                 {activeTab === 'journal' && (
                   <motion.div key="journal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                     <div className="flex justify-between items-center mb-12">
-                      <h2 className="text-sm font-mono font-bold text-brand-accent uppercase tracking-widest">Performance_Logs</h2>
-                      <button onClick={handleAddLog} className="px-6 py-2 bg-brand-accent text-brand-bg font-black text-[10px] uppercase tracking-widest hover:bg-white transition-all">
-                        NEW_ENTRY
+                      <h2 className="text-sm font-mono font-bold text-brand-accent uppercase tracking-widest">Performance Logs</h2>
+                      <button onClick={handleAddLog} className="px-6 py-2 bg-brand-accent text-brand-bg font-bold text-[10px] uppercase tracking-widest hover:bg-white transition-all">
+                        NEW ENTRY
                       </button>
                     </div>
                     
@@ -174,6 +174,60 @@ export default function AdminDashboard() {
                             <button onClick={() => handleDeleteLog(log.id)} className="text-zinc-700 hover:text-rose-500 transition-colors">
                               <Trash2 size={14} />
                             </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeTab === 'story' && (
+                  <motion.div key="story" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                    <div className="flex justify-between items-center mb-12">
+                      <h2 className="text-sm font-mono font-bold text-brand-accent uppercase tracking-widest">Story Timeline</h2>
+                      <button onClick={handleAddStoryPoint} className="px-6 py-2 bg-brand-accent text-brand-bg font-bold text-[10px] uppercase tracking-widest hover:bg-white transition-all">
+                        ADD POINT
+                      </button>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {story.map((point) => (
+                        <div key={point.id} className="p-6 border border-white/5 bg-white/[0.02] space-y-4">
+                          <div className="flex gap-4">
+                            <input className="bg-transparent border-zinc-800 border px-3 py-2 text-xs font-mono text-brand-accent w-24 outline-none" value={point.year} onChange={(e) => updateStory(story.map(s => s.id === point.id ? {...s, year: e.target.value} : s))} />
+                            <input className="bg-transparent border-zinc-800 border px-3 py-2 text-sm font-bold text-white flex-1 outline-none" value={point.title} onChange={(e) => updateStory(story.map(s => s.id === point.id ? {...s, title: e.target.value} : s))} />
+                            <button onClick={() => updateStory(story.filter(s => s.id !== point.id))} className="text-rose-500">
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                          <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-xs text-zinc-400 outline-none h-24" value={point.description} onChange={(e) => updateStory(story.map(s => s.id === point.id ? {...s, description: e.target.value} : s))} />
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeTab === 'products' && (
+                  <motion.div key="products" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                    <div className="flex justify-between items-center mb-12">
+                      <h2 className="text-sm font-mono font-bold text-brand-accent uppercase tracking-widest">Product Catalog</h2>
+                      <button onClick={handleAddProduct} className="px-6 py-2 bg-brand-accent text-brand-bg font-bold text-[10px] uppercase tracking-widest hover:bg-white transition-all">
+                        ADD PRODUCT
+                      </button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {products.map((product) => (
+                        <div key={product.id} className="p-6 border border-white/5 bg-white/[0.02] space-y-4">
+                          <input className="bg-transparent border-none p-0 text-lg font-bold text-white outline-none w-full" value={product.name} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, name: e.target.value} : p))} />
+                          <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-xs text-zinc-400 outline-none h-24" value={product.description} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, description: e.target.value} : p))} />
+                          <div className="flex gap-4">
+                            <select className="bg-zinc-900 border border-zinc-800 text-[10px] p-2 outline-none flex-1" value={product.status} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, status: e.target.value as any} : p))}>
+                              <option value="available">AVAILABLE</option>
+                              <option value="coming_soon">COMING SOON</option>
+                              <option value="sold_out">SOLD OUT</option>
+                            </select>
+                            <button onClick={() => updateProducts(products.filter(p => p.id !== product.id))} className="px-4 py-2 bg-rose-500/10 text-rose-500 text-[10px] font-bold">DELETE</button>
                           </div>
                         </div>
                       ))}

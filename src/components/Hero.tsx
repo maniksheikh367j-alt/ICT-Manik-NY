@@ -21,12 +21,12 @@ export default function Hero({ onStart }: { onStart: () => void }) {
               <span className="text-zinc-500 text-[10px] font-mono tracking-widest uppercase">Precision Trading</span>
             </div>
             
-            <h1 className="text-6xl md:text-8xl font-serif italic mb-10 leading-[0.9] tracking-tighter max-w-4xl font-black">
+            <h1 className="text-6xl md:text-8xl font-bold mb-10 leading-[0.9] tracking-tighter max-w-4xl font-black">
               Trading is a <span className="text-brand-accent">Mind Game</span>, Not a Chart Game.
             </h1>
             
             <p className="text-zinc-400 leading-relaxed text-xl max-w-2xl font-light">
-              Welcome to the official hub of <span className="text-white font-medium tracking-tight whitespace-nowrap">𝙄𝘾𝙏 𝙈𝘼𝙉𝙄𝙆 𝙉𝙔</span>. Here I document my daily journey, surgical setups, and the psychological evolution of a retail trader becoming part of the smart money.
+              Welcome to the official hub of <span className="text-white font-medium tracking-tight whitespace-nowrap">ICT MANIK NY</span>. Here I document my daily journey, surgical setups, and the psychological evolution of a retail trader becoming part of the smart money.
             </p>
           </div>
 
