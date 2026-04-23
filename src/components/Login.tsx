@@ -5,20 +5,33 @@ import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  const { login, isAdmin, user } = useAuth();
+  const { login, loginWithPassword, isAdmin, user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleGoogleLogin = async () => {
     setLoading(true);
+    setError('');
     try {
       await login();
-      // AuthContext will handle state, we navigate if authorized
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePasswordLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    const success = await loginWithPassword(password);
+    if (!success) {
+      setError('INVALID_PASSCODE_ACCESS_DENIED');
+    }
+    setLoading(false);
   };
 
   React.useEffect(() => {
@@ -43,8 +56,33 @@ export default function Login() {
         </div>
 
         <div className="space-y-6">
+          <form onSubmit={handlePasswordLogin} className="space-y-4">
+            <div className="relative">
+              <input 
+                type="password" 
+                placeholder="ENTER_PASSCODE" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 px-6 py-4 text-xs font-mono tracking-widest text-center text-white outline-none focus:border-brand-accent/40 transition-all"
+              />
+            </div>
+            <button 
+              type="submit"
+              disabled={loading}
+              className="w-full bg-white/5 text-zinc-400 py-4 font-bold uppercase tracking-[.2em] text-[10px] hover:bg-brand-accent hover:text-brand-bg transition-all disabled:opacity-50"
+            >
+              SECRET_LOGIN
+            </button>
+          </form>
+
+          <div className="flex items-center gap-4 py-2">
+            <div className="h-px bg-white/5 flex-1" />
+            <span className="text-[8px] text-zinc-700 font-bold uppercase tracking-widest leading-none">OR</span>
+            <div className="h-px bg-white/5 flex-1" />
+          </div>
+
           <button 
-            onClick={handleLogin}
+            onClick={handleGoogleLogin}
             disabled={loading}
             className="w-full bg-brand-accent text-brand-bg py-5 rounded-none font-black uppercase tracking-[.2em] text-xs shadow-xl shadow-brand-accent/10 hover:bg-white transition-all flex items-center justify-center gap-3 disabled:opacity-50"
           >
@@ -52,10 +90,10 @@ export default function Login() {
             {loading ? 'AUTHENTICATING...' : 'SIGN_IN_WITH_GOOGLE'}
           </button>
           
-          {user && !isAdmin && (
+          {(error || (user && !isAdmin)) && (
             <div className="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-500 text-[10px] font-bold uppercase tracking-widest leading-relaxed">
-              ACCESS_DENIED: UNAUTHORIZED_IDENTITY_DETECTED.<br/>
-              YOUR EMAIL IS NOT ALLOWLISTED.
+              {error || 'ACCESS_DENIED: UNAUTHORIZED_IDENTITY_DETECTED.'}<br/>
+              {!error && 'YOUR EMAIL IS NOT ALLOWLISTED.'}
             </div>
           )}
           

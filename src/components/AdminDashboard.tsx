@@ -111,6 +111,21 @@ export default function AdminDashboard() {
                           <input className="input-field" value={config.logoName} onChange={(e) => handleUpdateConfig({...config, logoName: e.target.value})} />
                         </div>
                         <div className="space-y-4">
+                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Logo_Image_URL</label>
+                          <div className="flex gap-2">
+                            <input className="input-field flex-1" value={config.logoImage || ''} onChange={(e) => handleUpdateConfig({...config, logoImage: e.target.value})} />
+                            <input type="file" accept="image/*" className="hidden" id="logo-upload" onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onloadend = () => handleUpdateConfig({...config, logoImage: reader.result as string});
+                                reader.readAsDataURL(file);
+                              }
+                            }} />
+                            <label htmlFor="logo-upload" className="px-4 py-2 bg-white/5 border border-white/10 text-[10px] uppercase font-bold flex items-center cursor-pointer">Upload</label>
+                          </div>
+                        </div>
+                        <div className="space-y-4">
                           <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Initials</label>
                           <input className="input-field w-24" maxLength={3} value={config.logoInitials} onChange={(e) => handleUpdateConfig({...config, logoInitials: e.target.value.toUpperCase()})} />
                         </div>
@@ -219,8 +234,29 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {products.map((product) => (
                         <div key={product.id} className="p-6 border border-white/5 bg-white/[0.02] space-y-4">
+                          <div className="group relative aspect-video bg-zinc-900 border border-white/5 mb-4 overflow-hidden">
+                            {product.image ? (
+                              <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-zinc-800 text-[10px] uppercase font-bold tracking-widest">No Visual</div>
+                            )}
+                            <input type="file" accept="image/*" className="hidden" id={`prod-img-${product.id}`} onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const reader = new FileReader();
+                                reader.onloadend = () => updateProducts(products.map(p => p.id === product.id ? {...p, image: reader.result as string} : p));
+                                reader.readAsDataURL(file);
+                              }
+                            }} />
+                            <label htmlFor={`prod-img-${product.id}`} className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[10px] font-bold uppercase tracking-widest cursor-pointer transition-opacity">
+                              Upload Image
+                            </label>
+                          </div>
+
                           <input className="bg-transparent border-none p-0 text-lg font-bold text-white outline-none w-full" value={product.name} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, name: e.target.value} : p))} />
-                          <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-xs text-zinc-400 outline-none h-24" value={product.description} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, description: e.target.value} : p))} />
+                          <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-xs text-zinc-400 outline-none h-24" placeholder="Short description..." value={product.description} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, description: e.target.value} : p))} />
+                          <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-[10px] text-zinc-500 outline-none h-24" placeholder="Specifications (one per line)..." value={product.details || ''} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, details: e.target.value} : p))} />
+                          
                           <div className="flex gap-4">
                             <select className="bg-zinc-900 border border-zinc-800 text-[10px] p-2 outline-none flex-1" value={product.status} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, status: e.target.value as any} : p))}>
                               <option value="available">AVAILABLE</option>
@@ -238,9 +274,9 @@ export default function AdminDashboard() {
                 {activeTab === 'posts' && (
                   <motion.div key="posts" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                     <div className="flex justify-between items-center mb-12">
-                      <h2 className="text-sm font-mono font-bold text-brand-accent uppercase tracking-widest">Market_Broadcasts</h2>
-                      <button onClick={handleAddPost} className="px-6 py-2 bg-brand-accent text-brand-bg font-black text-[10px] uppercase tracking-widest hover:bg-white transition-all">
-                        NEW_POST
+                      <h2 className="text-sm font-mono font-bold text-brand-accent uppercase tracking-widest">Market Broadcasts</h2>
+                      <button onClick={handleAddPost} className="px-6 py-2 bg-brand-accent text-brand-bg font-bold text-[10px] uppercase tracking-widest hover:bg-white transition-all">
+                        NEW POST
                       </button>
                     </div>
                     
@@ -248,11 +284,11 @@ export default function AdminDashboard() {
                       {posts.map((post) => (
                         <div key={post.id} className="p-8 border border-white/10 bg-white/[0.01] space-y-6">
                           <div className="flex justify-between gap-8 items-start">
-                            <input className="bg-transparent border-none p-0 text-xl font-serif italic text-white outline-none flex-1 placeholder:text-zinc-800" placeholder="Post_Title..." value={post.title} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, title: e.target.value} : p))} />
+                            <input className="bg-transparent border-none p-0 text-xl font-bold text-white outline-none flex-1 placeholder:text-zinc-800" placeholder="Post Title..." value={post.title} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, title: e.target.value} : p))} />
                             <input type="date" className="bg-white/5 border border-white/10 rounded-none px-4 py-2 text-[10px] font-mono text-zinc-400 outline-none" value={post.date} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, date: e.target.value} : p))} />
                           </div>
                           
-                          <textarea className="w-full bg-white/[0.02] border border-white/5 p-6 text-sm text-zinc-400 outline-none h-64 focus:border-brand-accent/20 transition-all font-light leading-relaxed" placeholder="Write_Market_Insights_Here..." value={post.content} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, content: e.target.value} : p))} />
+                          <textarea className="w-full bg-white/[0.02] border border-white/5 p-6 text-sm text-zinc-400 outline-none h-64 focus:border-brand-accent/20 transition-all font-light leading-relaxed" placeholder="Write Market Insights Here..." value={post.content} onChange={(e) => updatePosts(posts.map(p => p.id === post.id ? {...p, content: e.target.value} : p))} />
                           
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-4">
@@ -265,14 +301,40 @@ export default function AdminDashboard() {
                                 }
                               }} />
                               <label htmlFor={`img-${post.id}`} className="text-[10px] font-bold uppercase tracking-widest text-brand-accent cursor-pointer hover:text-white transition-colors">
-                                {post.image ? 'CHANGE_VISUAL' : 'UPLOAD_VISUAL'}
+                                {post.image ? 'CHANGE VISUAL' : 'UPLOAD VISUAL'}
                               </label>
                               {post.image && <button onClick={() => updatePosts(posts.map(p => p.id === post.id ? {...p, image: ''} : p))} className="text-rose-500 text-[10px] uppercase font-bold tracking-widest">REMOVE</button>}
                             </div>
-                            <button onClick={() => updatePosts(posts.filter(p => p.id !== post.id))} className="text-zinc-600 hover:text-rose-500 transition-colors text-[10px] uppercase font-bold tracking-widest">DELETE_POST</button>
+                            <button onClick={() => updatePosts(posts.filter(p => p.id !== post.id))} className="text-zinc-600 hover:text-rose-500 transition-colors text-[10px] uppercase font-bold tracking-widest">DELETE POST</button>
                           </div>
                         </div>
                       ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {activeTab === 'policies' && (
+                  <motion.div key="policies" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                    <h2 className="text-sm font-mono font-bold text-brand-accent mb-8 border-b border-brand-accent/20 pb-4 uppercase tracking-widest">Legal & Policies</h2>
+                    <div className="space-y-12">
+                      <div className="space-y-4">
+                        <SectionHeader title="Privacy Policy" />
+                        <textarea 
+                          className="w-full bg-white/[0.02] border border-white/5 p-6 text-sm text-zinc-400 outline-none h-96 focus:border-brand-accent/20 transition-all font-mono" 
+                          value={config.privacyPolicy || ''} 
+                          onChange={(e) => handleUpdateConfig({...config, privacyPolicy: e.target.value})} 
+                          placeholder="Enter privacy policy text..."
+                        />
+                      </div>
+                      <div className="space-y-4">
+                        <SectionHeader title="Terms of Service" />
+                        <textarea 
+                          className="w-full bg-white/[0.02] border border-white/5 p-6 text-sm text-zinc-400 outline-none h-96 focus:border-brand-accent/20 transition-all font-mono" 
+                          value={config.termsOfService || ''} 
+                          onChange={(e) => handleUpdateConfig({...config, termsOfService: e.target.value})} 
+                          placeholder="Enter terms of service text..."
+                        />
+                      </div>
                     </div>
                   </motion.div>
                 )}

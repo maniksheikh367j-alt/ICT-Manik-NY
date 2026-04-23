@@ -41,6 +41,7 @@ export default function Footer() {
           <span>© 2024 {config.logoName} - All Rights Reserved</span>
         </div>
         <div className="flex gap-8 mt-4 md:mt-0">
+          <Link to="/login" className="hover:text-white transition-colors">Admin Terminal</Link>
           <Link to="/policies?type=privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
           <Link to="/policies?type=terms" className="hover:text-white transition-colors">Terms of Service</Link>
         </div>
