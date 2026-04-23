@@ -27,7 +27,7 @@ export default function Navbar({ activeSection, onNavigate }: { activeSection: s
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5 px-6 md:px-10 py-6 flex justify-between items-center transition-all font-sans">
         <div className="flex items-center gap-6">
           <Link to="/" className="group flex items-center gap-4">
-            <div className="w-10 h-10 bg-brand-accent/10 border border-brand-accent/20 flex items-center justify-center font-mono font-bold text-brand-accent group-hover:bg-white group-hover:text-black transition-all overflow-hidden">
+            <div className="w-10 h-10 rounded-full bg-brand-accent/10 border border-brand-accent/20 flex items-center justify-center font-mono font-bold text-brand-accent group-hover:bg-white group-hover:text-black transition-all overflow-hidden">
               {config.logoImage ? (
                 <img src={config.logoImage} alt={config.logoInitials} className="w-full h-full object-cover" />
               ) : (
@@ -64,7 +64,7 @@ export default function Navbar({ activeSection, onNavigate }: { activeSection: s
             onClick={() => onNavigate('store')} 
             className="hidden sm:block px-6 py-2 bg-brand-accent text-brand-bg text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-all shadow-lg shadow-brand-accent/5"
           >
-            VIEW COURSES
+            COURSE
           </button>
           <button 
             onClick={() => setIsOpen(!isOpen)}
@@ -109,7 +109,7 @@ export default function Navbar({ activeSection, onNavigate }: { activeSection: s
                   onClick={() => handleMobileNav('store')}
                   className="w-full bg-brand-accent text-brand-bg py-5 font-bold uppercase tracking-widest text-xs"
                 >
-                  VIEW COURSES
+                  COURSE
                 </button>
               </div>
             </div>
