@@ -68,33 +68,35 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-brand-bg pt-32 px-10 pb-20 font-sans">
       <div className="max-w-7xl mx-auto">
-        <header className="flex justify-between items-center mb-12 pb-8 border-b border-white/5">
+        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 pb-8 border-b border-white/5 gap-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="w-2 h-2 bg-brand-accent rounded-full animate-pulse" />
-              <h1 className="text-3xl font-mono font-bold tracking-tighter uppercase">Mission_Control</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight uppercase">Dashboard</h1>
             </div>
-            <p className="text-zinc-500 text-xs font-mono tracking-widest uppercase">Admin Authority: ICT_MANIK_NY</p>
+            <p className="text-zinc-500 text-[10px] tracking-widest uppercase">Admin: ICT MANIK NY</p>
           </div>
-          <div className="flex items-center gap-6">
-            {isSaving && <span className="text-[10px] font-mono text-brand-accent animate-pulse">SYNCING_DATA...</span>}
+          <div className="flex items-center justify-between w-full sm:w-auto gap-6 border-t sm:border-t-0 border-white/5 pt-6 sm:pt-0">
+            {isSaving && <span className="text-[10px] font-mono text-brand-accent animate-pulse">SAVING...</span>}
             <button 
               onClick={() => { logout(); window.location.href = '/'; }}
               className="px-4 py-2 bg-white/5 text-zinc-400 border border-white/10 hover:bg-rose-500 hover:text-white transition-all text-[10px] font-bold uppercase tracking-widest"
             >
-              Sign_Out
+              Sign Out
             </button>
           </div>
         </header>
 
         <div className="grid grid-cols-12 gap-8">
-          <aside className="col-span-12 lg:col-span-3 space-y-2">
-            <NavButton active={activeTab === 'journal'} onClick={() => setActiveTab('journal')} label="PNL_RECORDS" />
-            <NavButton active={activeTab === 'posts'} onClick={() => setActiveTab('posts')} label="DAILY_ANALYSIS" />
-            <NavButton active={activeTab === 'story'} onClick={() => setActiveTab('story')} label="JOURNEY_TIMELINE" />
-            <NavButton active={activeTab === 'products'} onClick={() => setActiveTab('products')} label="PRODUCT_MGMT" />
-            <NavButton active={activeTab === 'settings'} onClick={() => setActiveTab('settings')} label="SYSTEM_CONFIG" />
-            <NavButton active={activeTab === 'policies'} onClick={() => setActiveTab('policies')} label="LEGAL_DOCS" />
+          <aside className="col-span-12 lg:col-span-3">
+            <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0 scrollbar-hide no-scrollbar">
+              <NavButton active={activeTab === 'journal'} onClick={() => setActiveTab('journal')} label="PNL RECORDS" />
+              <NavButton active={activeTab === 'posts'} onClick={() => setActiveTab('posts')} label="DAILY ANALYSIS" />
+              <NavButton active={activeTab === 'story'} onClick={() => setActiveTab('story')} label="JOURNEY TIMELINE" />
+              <NavButton active={activeTab === 'products'} onClick={() => setActiveTab('products')} label="STORE PRODUCTS" />
+              <NavButton active={activeTab === 'settings'} onClick={() => setActiveTab('settings')} label="SITE SETTINGS" />
+              <NavButton active={activeTab === 'policies'} onClick={() => setActiveTab('policies')} label="LEGAL POLICIES" />
+            </div>
           </aside>
 
           <main className="col-span-12 lg:col-span-9">
@@ -102,16 +104,16 @@ export default function AdminDashboard() {
               <AnimatePresence mode="wait">
                 {activeTab === 'settings' && (
                   <motion.div key="settings" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <h2 className="text-sm font-mono font-bold text-brand-accent mb-8 border-b border-brand-accent/20 pb-4 uppercase tracking-widest">System_Settings</h2>
+                    <h2 className="text-sm font-mono font-bold text-brand-accent mb-8 border-b border-brand-accent/20 pb-4 uppercase tracking-widest">System Settings</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                       <div className="space-y-8">
                         <SectionHeader title="Branding" />
                         <div className="space-y-4">
-                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Logo_Name</label>
+                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Logo Name</label>
                           <input className="input-field" value={config.logoName} onChange={(e) => handleUpdateConfig({...config, logoName: e.target.value})} />
                         </div>
                         <div className="space-y-4">
-                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Logo_Image_URL</label>
+                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Logo Image URL</label>
                           <div className="flex gap-2">
                             <input className="input-field flex-1" value={config.logoImage || ''} onChange={(e) => handleUpdateConfig({...config, logoImage: e.target.value})} />
                             <input type="file" accept="image/*" className="hidden" id="logo-upload" onChange={(e) => {
@@ -126,6 +128,10 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                         <div className="space-y-4">
+                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">TikTok Profile Link</label>
+                          <input className="input-field" placeholder="https://tiktok.com/@yourprofile" value={config.tiktok || ''} onChange={(e) => handleUpdateConfig({...config, tiktok: e.target.value})} />
+                        </div>
+                        <div className="space-y-4">
                           <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Initials</label>
                           <input className="input-field w-24" maxLength={3} value={config.logoInitials} onChange={(e) => handleUpdateConfig({...config, logoInitials: e.target.value.toUpperCase()})} />
                         </div>
@@ -136,17 +142,17 @@ export default function AdminDashboard() {
                       </div>
 
                       <div className="space-y-8">
-                        <SectionHeader title="Comms_Link" />
+                        <SectionHeader title="Links & Contacts" />
                         <div className="space-y-4">
-                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Telegram_ID</label>
+                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Telegram ID</label>
                           <input className="input-field" value={config.telegram} onChange={(e) => handleUpdateConfig({...config, telegram: e.target.value})} />
                         </div>
                         <div className="space-y-4">
-                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">WhatsApp_Link</label>
+                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">WhatsApp Link</label>
                           <input className="input-field" value={config.whatsapp} onChange={(e) => handleUpdateConfig({...config, whatsapp: e.target.value})} />
                         </div>
                         <div className="space-y-4">
-                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Official_Email</label>
+                          <label className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">Official Email</label>
                           <input className="input-field" value={config.email} onChange={(e) => handleUpdateConfig({...config, email: e.target.value})} />
                         </div>
                       </div>
@@ -227,7 +233,7 @@ export default function AdminDashboard() {
                     <div className="flex justify-between items-center mb-12">
                       <h2 className="text-sm font-mono font-bold text-brand-accent uppercase tracking-widest">Product Catalog</h2>
                       <button onClick={handleAddProduct} className="px-6 py-2 bg-brand-accent text-brand-bg font-bold text-[10px] uppercase tracking-widest hover:bg-white transition-all">
-                        ADD PRODUCT
+                        প্রোডাক্ট যোগ করুন (ADD PRODUCT)
                       </button>
                     </div>
                     
@@ -253,7 +259,10 @@ export default function AdminDashboard() {
                             </label>
                           </div>
 
-                          <input className="bg-transparent border-none p-0 text-lg font-bold text-white outline-none w-full" value={product.name} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, name: e.target.value} : p))} />
+                          <div className="flex gap-2">
+                            <input className="bg-transparent border-none p-0 text-lg font-bold text-white outline-none flex-1" value={product.name} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, name: e.target.value} : p))} />
+                            <input className="bg-zinc-900 border border-zinc-800 px-2 py-1 text-[8px] font-mono text-brand-accent w-24 outline-none uppercase tracking-widest" placeholder="TYPE" value={product.type} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, type: e.target.value} : p))} />
+                          </div>
                           <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-xs text-zinc-400 outline-none h-24" placeholder="Short description..." value={product.description} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, description: e.target.value} : p))} />
                           <textarea className="w-full bg-transparent border-zinc-800 border p-3 text-[10px] text-zinc-500 outline-none h-24" placeholder="Specifications (one per line)..." value={product.details || ''} onChange={(e) => updateProducts(products.map(p => p.id === product.id ? {...p, details: e.target.value} : p))} />
                           
@@ -351,7 +360,7 @@ function NavButton({ active, onClick, label }: { active: boolean, onClick: () =>
   return (
     <button 
       onClick={onClick}
-      className={`w-full text-left px-6 py-4 font-mono text-[10px] uppercase tracking-widest transition-all border ${active ? 'bg-brand-accent border-brand-accent text-brand-bg font-black' : 'bg-transparent border-white/5 text-zinc-500 hover:bg-white/5 hover:text-zinc-300'}`}
+      className={`lg:w-full text-left px-6 py-4 font-mono text-[10px] uppercase tracking-widest transition-all border whitespace-nowrap min-w-max lg:min-w-0 ${active ? 'bg-brand-accent border-brand-accent text-brand-bg font-black' : 'bg-transparent border-white/5 text-zinc-500 hover:bg-white/5 hover:text-zinc-300'}`}
     >
       {active ? `> ${label}` : label}
     </button>

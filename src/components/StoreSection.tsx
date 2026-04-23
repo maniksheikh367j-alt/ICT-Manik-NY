@@ -62,16 +62,16 @@ export default function StoreSection() {
                 </button>
 
                 <div>
-                  <h2 className="text-4xl font-serif italic font-black uppercase mb-8 leading-tight tracking-tighter">
+                  <h2 className="text-4xl font-sans font-black uppercase mb-8 leading-tight tracking-tighter">
                     {selectedProduct.name}
                   </h2>
                   <div className="space-y-8">
-                    <p className="text-zinc-400 text-lg leading-relaxed font-light italic">
-                      "{selectedProduct.description}"
+                    <p className="text-zinc-400 text-lg leading-relaxed font-light">
+                      {selectedProduct.description}
                     </p>
                     {selectedProduct.details && (
                       <div className="space-y-4 pt-8 border-t border-white/5">
-                        <p className="text-[10px] font-mono font-bold text-zinc-600 uppercase tracking-widest">Specifications_&_Syllabus</p>
+                        <p className="text-[10px] font-mono font-bold text-zinc-600 uppercase tracking-widest">Syllabus & Details</p>
                         <div className="grid grid-cols-1 gap-4">
                           {selectedProduct.details.split('\n').map((line, i) => (
                             <div key={i} className="flex gap-4 items-start">
@@ -85,18 +85,18 @@ export default function StoreSection() {
                   </div>
                 </div>
 
-                <div className="flex gap-4 mt-16">
+                <div className="flex flex-col gap-4 mt-16">
                   <button 
                     onClick={() => setShowCheckout(true)}
-                    className="flex-1 bg-brand-accent text-brand-bg py-5 font-black uppercase tracking-widest text-[10px] hover:bg-white transition-all shadow-xl shadow-brand-accent/10"
+                    className="w-full bg-brand-accent text-brand-bg py-5 font-bold uppercase tracking-widest text-[11px] hover:bg-white transition-all shadow-xl shadow-brand-accent/10 flex items-center justify-center gap-3"
                   >
-                    Initiate_Order
+                    অর্ডার করুন (Buy Now)
                   </button>
                   <button 
                     onClick={() => openWhatsApp(selectedProduct)}
-                    className="px-8 border border-white/10 text-white hover:bg-white/5 transition-all flex items-center justify-center"
+                    className="w-full py-5 border border-white/10 text-white font-bold uppercase tracking-widest text-[10px] hover:bg-white/5 transition-all flex items-center justify-center gap-3"
                   >
-                    <MessageCircle size={20} />
+                    <MessageCircle size={18} /> সরাসরি কথা বলুন (WhatsApp)
                   </button>
                 </div>
               </div>
@@ -118,32 +118,38 @@ export default function StoreSection() {
               className="relative w-full max-w-md bg-brand-bg border border-brand-accent/20 p-12 text-center"
             >
               <div className="mb-10">
-                <span className="text-[10px] font-mono font-bold text-brand-accent uppercase tracking-widest block mb-4">Secure_Checkout</span>
-                <h2 className="text-3xl font-serif italic font-black uppercase tracking-tighter">Order_Protocol</h2>
+                <span className="text-[10px] font-mono font-bold text-brand-accent uppercase tracking-widest block mb-4">Secure Checkout</span>
+                <h2 className="text-3xl font-bold uppercase tracking-tighter">অর্ডার প্রটোকল</h2>
               </div>
               
-              <div className="space-y-4 mb-12">
+              <div className="space-y-4 mb-12 text-left">
+                <p className="text-xs text-zinc-500 mb-6 leading-relaxed">পেমেন্ট কমপ্লিট করে ট্রানজেকশন আইডি সহ নিচের বাটনে ক্লিক করে হোয়াটস্যাপে মেসেজ দিন।</p>
+                
                 <div className="p-6 bg-white/[0.02] border border-white/5 flex flex-col items-center">
-                  <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">Nagad_Gateway</span>
+                  <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">Nagad Personal</span>
                   <span className="text-xl font-mono font-bold text-brand-accent tracking-tighter">{config.nagad || 'UNCONFIGURED'}</span>
                 </div>
                 <div className="p-6 bg-white/[0.02] border border-white/5 flex flex-col items-center">
-                  <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">Binance_ID</span>
+                  <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">Binance Pay ID</span>
                   <span className="text-xl font-mono font-bold text-brand-accent tracking-tighter">{config.binancePayId || 'UNCONFIGURED'}</span>
+                </div>
+                <div className="p-6 bg-white/[0.02] border border-white/5 flex flex-col items-center">
+                  <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest mb-2">WhatsApp Contact</span>
+                  <span className="text-xl font-mono font-bold text-zinc-300 tracking-tighter">{config.whatsapp || 'UNCONFIGURED'}</span>
                 </div>
               </div>
 
               <button 
                 onClick={() => openWhatsApp(selectedProduct, true)}
-                className="w-full py-5 bg-brand-accent text-brand-bg font-black uppercase tracking-widest text-[10px] hover:bg-white transition-all mb-4"
+                className="w-full py-5 bg-brand-accent text-brand-bg font-bold uppercase tracking-widest text-[10px] hover:bg-white transition-all mb-4"
               >
-                Confirm_Payment_Via_WhatsApp
+                পেমেন্ট কনফার্ম করুন (WhatsApp)
               </button>
               <button 
                 onClick={() => setShowCheckout(false)}
-                className="text-zinc-600 text-[10px] font-black uppercase tracking-widest hover:text-zinc-400 underline underline-offset-8 decoration-zinc-800"
+                className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest hover:text-zinc-400"
               >
-                Abort_Transaction
+                বাতিল করুন (Abort)
               </button>
             </motion.div>
           </div>
@@ -186,54 +192,83 @@ export default function StoreSection() {
             </div>
           </div>
 
-          <div className="col-span-12 lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-8">
-            {products.map((product) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="group relative flex flex-col"
+          <div className="col-span-12 lg:col-span-7">
+            <div className="relative group/carousel">
+              <button 
+                onClick={() => document.getElementById('product-carousel')?.scrollBy({ left: -400, behavior: 'smooth' })}
+                className="absolute -left-6 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-brand-accent text-brand-bg flex items-center justify-center rounded-full opacity-0 group-hover/carousel:opacity-100 transition-all shadow-xl hover:scale-110 active:scale-95"
               >
-                <div className="relative aspect-square bg-zinc-900 border border-white/5 overflow-hidden mb-8">
-                  {product.image ? (
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-zinc-800">
-                      <ShoppingCart size={80} strokeWidth={0.5} />
+                <ArrowRight className="rotate-180" size={20} />
+              </button>
+              
+              <button 
+                onClick={() => document.getElementById('product-carousel')?.scrollBy({ left: 400, behavior: 'smooth' })}
+                className="absolute -right-6 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-brand-accent text-brand-bg flex items-center justify-center rounded-full opacity-0 group-hover/carousel:opacity-100 transition-all shadow-xl hover:scale-110 active:scale-95"
+              >
+                <ArrowRight size={20} />
+              </button>
+
+              <div 
+                id="product-carousel"
+                className="flex gap-8 overflow-x-auto pb-12 snap-x snap-mandatory scrollbar-hide no-scrollbar"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {products.map((product) => (
+                  <motion.div
+                    key={product.id}
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="min-w-full sm:min-w-[45%] lg:min-w-[48%] snap-center flex flex-col group relative"
+                  >
+                    <div className="relative aspect-square bg-zinc-900 border border-white/5 overflow-hidden mb-8">
+                      {product.image ? (
+                        <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-zinc-800">
+                          <ShoppingCart size={80} strokeWidth={0.5} />
+                        </div>
+                      )}
+                      <div className="absolute top-6 left-6">
+                        <span className="bg-brand-bg/80 backdrop-blur-md border border-white/10 text-white text-[9px] px-3 py-1.5 font-mono font-bold uppercase tracking-widest flex items-center gap-2">
+                          {product.status === 'coming_soon' ? <Lock size={10} /> : null}
+                          {product.status?.replace('_', ' ')}
+                        </span>
+                      </div>
                     </div>
-                  )}
-                  <div className="absolute top-6 left-6">
-                    <span className="bg-brand-bg/80 backdrop-blur-md border border-white/10 text-white text-[9px] px-3 py-1.5 font-mono font-bold uppercase tracking-widest flex items-center gap-2">
-                       {product.status === 'coming_soon' ? <Lock size={10} /> : null}
-                       {product.status?.replace('_', ' ')}
-                    </span>
-                  </div>
-                </div>
 
-                <div className="flex-1">
-                  <h3 className="text-2xl font-serif italic font-black uppercase tracking-tighter mb-4 group-hover:text-brand-accent transition-colors">{product.name}</h3>
-                  <p className="text-zinc-500 text-sm font-light leading-relaxed mb-8 line-clamp-3">
-                    {product.description}
-                  </p>
-                </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold uppercase tracking-tighter mb-4 group-hover:text-brand-accent transition-colors">{product.name}</h3>
+                      <p className="text-zinc-500 text-sm font-light leading-relaxed mb-8 line-clamp-3">
+                        {product.description}
+                      </p>
+                    </div>
 
-                <div className="flex gap-4 pt-8 border-t border-white/5">
-                  <button 
-                    onClick={() => setSelectedProduct(product)}
-                    className="flex-1 text-[10px] font-black uppercase tracking-widest border border-brand-accent/30 text-brand-accent py-4 hover:bg-brand-accent hover:text-brand-bg transition-all"
-                  >
-                    View_Spec
-                  </button>
-                  <button 
-                    onClick={() => { setSelectedProduct(product); setShowCheckout(true); }}
-                    className="flex-1 text-[10px] font-black uppercase tracking-widest bg-brand-accent text-brand-bg py-4 hover:bg-white transition-all shadow-lg shadow-brand-accent/10"
-                  >
-                    Acquire
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+                    <div className="flex gap-4 pt-8 border-t border-white/5">
+                      <button 
+                        onClick={() => setSelectedProduct(product)}
+                        className="flex-1 text-[10px] font-bold uppercase tracking-widest border border-brand-accent/30 text-brand-accent py-4 hover:bg-brand-accent hover:text-brand-bg transition-all"
+                      >
+                        বিস্তারিত (Details)
+                      </button>
+                      <button 
+                        onClick={() => { setSelectedProduct(product); setShowCheckout(true); }}
+                        className="flex-1 text-[10px] font-bold uppercase tracking-widest bg-brand-accent text-brand-bg py-4 hover:bg-white transition-all shadow-lg shadow-brand-accent/10"
+                      >
+                        কিনুন (Buy)
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Navigation Indicators */}
+              <div className="flex justify-center gap-4 mt-8">
+                {products.map((_, i) => (
+                  <div key={i} className="w-2 h-2 rounded-full bg-white/10 group-hover:bg-brand-accent/30 transition-all" />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -9,16 +9,16 @@ export default function Footer() {
       <div className="flex flex-wrap justify-center gap-8 border-b border-white/5 pb-8 w-full max-w-4xl">
         <div className="flex flex-col items-center gap-2">
           <span className="text-zinc-400">Telegram</span>
-          <a href={`https://t.me/${config.telegram.replace('@', '')}`} className="text-brand-accent lowercase">{config.telegram}</a>
+          <a href={`https://t.me/${config.telegram.replace('@', '')}`} target="_blank" rel="noreferrer" className="text-brand-accent lowercase">{config.telegram}</a>
         </div>
         <div className="flex flex-col items-center gap-2">
           <span className="text-zinc-400">WhatsApp</span>
-          <a href={`https://wa.me/${config.whatsapp.replace(/[^0-9]/g, '')}`} className="text-brand-accent">{config.whatsapp}</a>
+          <a href={`https://wa.me/${config.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="text-brand-accent">{config.whatsapp}</a>
         </div>
         {config.tiktok && (
           <div className="flex flex-col items-center gap-2">
             <span className="text-zinc-400">TikTok</span>
-            <a href={`https://www.tiktok.com/${config.tiktok.startsWith('@') ? config.tiktok : '@' + config.tiktok}`} className="text-brand-accent lowercase">{config.tiktok}</a>
+            <a href={config.tiktok.includes('http') ? config.tiktok : `https://www.tiktok.com/${config.tiktok.startsWith('@') ? config.tiktok : '@' + config.tiktok}`} target="_blank" rel="noreferrer" className="text-brand-accent lowercase">{config.tiktok}</a>
           </div>
         )}
         <div className="flex flex-col items-center gap-2">

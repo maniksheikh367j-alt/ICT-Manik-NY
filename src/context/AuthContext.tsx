@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { auth, loginWithGoogle, logout as firebaseLogout } from '../lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, User, signInAnonymously } from 'firebase/auth';
 
 interface AuthContextType {
   isAdmin: boolean;
@@ -12,7 +12,7 @@ interface AuthContextType {
 }
 
 const ADMIN_EMAIL = 'maniksheikh2006@gmail.com';
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'secret123';
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -22,8 +22,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isPasscodeAdmin, setIsPasscodeAdmin] = useState(false);
 
   useEffect(() => {
-    const saved = sessionStorage.getItem('admin_auth');
-    if (saved === 'true') setIsPasscodeAdmin(true);
+    const saved = localStorage.getItem('admin_auth');
+    if (saved === 'true') {
+      setIsPasscodeAdmin(true);
+      // Try to re-authenticate anonymously if we have a saved session
+      signInAnonymously(auth).catch(console.error);
+    }
 
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u);
@@ -49,9 +53,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithPassword = async (password: string) => {
     if (password === ADMIN_PASSWORD) {
-      setIsPasscodeAdmin(true);
-      sessionStorage.setItem('admin_auth', 'true');
-      return true;
+      try {
+        await signInAnonymously(auth);
+        setIsPasscodeAdmin(true);
+        localStorage.setItem('admin_auth', 'true');
+        return true;
+      } catch (error: any) {
+        console.error('Error signing in anonymously:', error);
+        if (error.code === 'auth/operation-not-allowed') {
+          alert('ERROR: Anonymous Authentication is disabled in Firebase Console. Please enable it in Authentication > Sign-in method.');
+        } else {
+          alert('LOGIN_ERROR: ' + error.message);
+        }
+        return false;
+      }
     }
     return false;
   };
@@ -59,7 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = async () => {
     await firebaseLogout();
     setIsPasscodeAdmin(false);
-    sessionStorage.removeItem('admin_auth');
+    localStorage.removeItem('admin_auth');
   };
 
   return (

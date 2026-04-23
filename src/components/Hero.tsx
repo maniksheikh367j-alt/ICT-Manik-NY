@@ -21,7 +21,7 @@ export default function Hero({ onStart }: { onStart: () => void }) {
               <span className="text-zinc-500 text-[10px] font-mono tracking-widest uppercase">Precision Trading</span>
             </div>
             
-            <h1 className="text-6xl md:text-8xl font-bold mb-10 leading-[0.9] tracking-tighter max-w-4xl font-black">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-10 leading-[0.9] tracking-tighter max-w-4xl font-black">
               Trading is a <span className="text-brand-accent">Mind Game</span>, Not a Chart Game.
             </h1>
             

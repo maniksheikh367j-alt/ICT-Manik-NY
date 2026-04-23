@@ -16,7 +16,10 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isEmailVerified() && request.auth.token.email == 'maniksheikh2006@gmail.com';
+      return isSignedIn() && (
+        request.auth.token.email == 'maniksheikh2006@gmail.com' || 
+        request.auth.token.firebase.sign_in_provider == 'anonymous'
+      );
     }
 
     function isValidId(id) {
