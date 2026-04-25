@@ -7,12 +7,12 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: () => Promise<void>;
-  loginWithPassword: (password: string) => Promise<boolean>;
+  loginWithPassword: (username: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
 }
 
-const ADMIN_EMAIL = 'maniksheikh2006@gmail.com';
-const ADMIN_PASSWORD = (import.meta as any).env.VITE_ADMIN_PASSWORD || 'admin123';
+const ADMIN_USERNAME = 'manik23';
+const ADMIN_PASSWORD = (import.meta as any).env.VITE_ADMIN_PASSWORD || 'Manik@&*35';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => unsubscribe();
   }, []);
 
-  const isAdmin = (user?.email === ADMIN_EMAIL && user?.emailVerified) || isPasscodeAdmin;
+  const isAdmin = (user?.email === 'maniksheikh2006@gmail.com' && user?.emailVerified) || isPasscodeAdmin;
 
   const login = async () => {
     try {
@@ -51,8 +51,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const loginWithPassword = async (password: string) => {
-    if (password === ADMIN_PASSWORD) {
+  const loginWithPassword = async (username: string, password: string) => {
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       try {
         await signInAnonymously(auth);
         setIsPasscodeAdmin(true);
