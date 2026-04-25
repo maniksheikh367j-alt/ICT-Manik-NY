@@ -5,18 +5,24 @@ import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  const { login, isAdmin, user } = useAuth();
+  const { login, isAdmin } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleGoogleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     setLoading(true);
     setError('');
     try {
-      await login();
+      const success = await login(username, password);
+      if (!success) {
+        setError('Invalid login details');
+      }
     } catch (error: any) {
-      setError(error.message || 'AUTHENTICATION_FAILED');
+      setError('AUTHENTICATION_FAILED');
     } finally {
       setLoading(false);
     }
@@ -58,27 +64,48 @@ export default function Login() {
               <div className="w-12 h-1 bg-brand-neon rounded-full mt-4 shadow-[0_0_10px_rgba(0,234,255,0.5)]" />
             </div>
 
-            <div className="space-y-6">
-              <div className="text-center py-4">
-                <p className="text-[10px] text-zinc-500 font-mono tracking-[0.3em] uppercase">SYSTEM_IDENTIFICATION_REQUIRED</p>
-                <div className="mt-6 flex justify-center">
-                  <div className="w-1 h-1 bg-brand-neon rounded-full animate-ping" />
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div className="space-y-4">
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-brand-neon/5 blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                  <input 
+                    type="text" 
+                    placeholder="OPERATOR_ID" 
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-6 py-5 text-sm font-mono text-white tracking-[0.2em] text-center outline-none focus:border-brand-neon/50 focus:bg-[#080808] transition-all relative z-10"
+                    disabled={loading}
+                    required
+                  />
+                </div>
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-brand-neon/5 blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                  <input 
+                    type="password" 
+                    placeholder="ENTER_PASSCODE" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-[#050505] border border-white/10 rounded-xl px-6 py-5 text-sm font-mono text-white tracking-[0.5em] text-center outline-none focus:border-brand-neon/50 focus:bg-[#080808] transition-all relative z-10"
+                    disabled={loading}
+                    required
+                  />
                 </div>
               </div>
 
               <motion.button 
                 whileHover={{ scale: 1.02, boxShadow: '0 0 30px rgba(0, 234, 255, 0.6)' }}
                 whileTap={{ scale: 0.98 }}
-                onClick={handleGoogleLogin}
+                type="submit"
                 disabled={loading}
                 className="w-full bg-brand-neon text-black py-6 rounded-xl font-black uppercase tracking-[0.3em] text-xs shadow-[0_0_20px_rgba(0,234,255,0.4)] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin" />
                 ) : (
-                  <>INITIATE_AUTHORITY_SYNC <LogIn size={14} /></>
+                  <>AUTHENTICATE <LogIn size={14} /></>
                 )}
               </motion.button>
+            </form>
 
               <div className="relative py-8">
                 <div className="absolute inset-0 flex items-center">
@@ -94,13 +121,13 @@ export default function Login() {
                 ENCRYPTION_LEVEL_AES_256
               </div>
 
-              {(error || (user && !isAdmin)) && (
+              {error !== '' && (
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-8 p-4 bg-rose-500/10 border border-rose-500/20 text-rose-500 text-[10px] font-bold uppercase tracking-widest text-center rounded-xl"
                 >
-                  {error || 'LOG_ERROR: IDENTITY NOT AUTHORIZED'}
+                  {error}
                 </motion.div>
               )}
 
@@ -110,8 +137,7 @@ export default function Login() {
               </div>
             </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
 
       {/* Footer Info */}
       <div className="absolute bottom-8 left-0 w-full text-center pointer-events-none">

@@ -4,47 +4,44 @@ import { onAuthStateChanged, User, signInAnonymously } from 'firebase/auth';
 
 interface AuthContextType {
   isAdmin: boolean;
-  user: User | null;
   loading: boolean;
-  login: () => Promise<void>;
-  logout: () => Promise<void>;
+  login: (username: string, password: string) => Promise<boolean>;
+  logout: () => void;
 }
+
+const ADMIN_USERNAME = 'manik23';
+const ADMIN_PASSWORD = 'Manik@&*35';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
-      setUser(u);
-      setLoading(false);
-    });
-    return () => unsubscribe();
+    const saved = localStorage.getItem('admin_session');
+    if (saved === 'active') {
+      setIsAdmin(true);
+    }
+    setLoading(false);
   }, []);
 
-  const isAdmin = user?.email === 'maniksheikh2006@gmail.com' && user?.emailVerified === true;
-
-  const login = async () => {
-    try {
-      await loginWithGoogle();
-    } catch (error: any) {
-      if (error.code === 'auth/popup-closed-by-user') {
-        console.log('Login cancelled by user.');
-        return;
-      }
-      console.error('Error signing in with Google:', error);
-      throw error;
+  const login = async (username: string, password: string): Promise<boolean> => {
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      setIsAdmin(true);
+      localStorage.setItem('admin_session', 'active');
+      return true;
     }
+    return false;
   };
 
-  const logout = async () => {
-    await firebaseLogout();
+  const logout = () => {
+    setIsAdmin(false);
+    localStorage.removeItem('admin_session');
   };
 
   return (
-    <AuthContext.Provider value={{ isAdmin, user, loading, login, logout }}>
+    <AuthContext.Provider value={{ isAdmin, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
