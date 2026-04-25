@@ -12,7 +12,15 @@ export default function StoreSection() {
   const openWhatsApp = (product: Product) => {
     if (!config.whatsapp) return;
     const phone = config.whatsapp.replace(/\D/g, '');
-    const message = encodeURIComponent(`Hi, I want to buy: ${product.name}\nType: ${product.type}\nStatus: Available`);
+    const message = encodeURIComponent(
+      `হ্যালো, আমি "${product.name}" এই প্রোডাক্টটি কিনতে চাই।\n` +
+      `এই প্রোডাক্টটি কি এখন অ্যাক্টিভ বা এভেইলেবল আছে?\n\n` +
+      `দয়া করে আমাকে জানাবেন:\n` +
+      `- পেমেন্ট মেথড কী\n` +
+      `- কীভাবে প্রোডাক্ট ডেলিভারি পাবো\n` +
+      `- কত সময়ের মধ্যে এক্সেস পাবো\n\n` +
+      `ধন্যবাদ।`
+    );
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
 
