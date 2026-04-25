@@ -16,8 +16,8 @@ export default function StorySection() {
             </h2>
           </div>
           <div className="max-w-xs">
-             <p className="text-zinc-500 text-sm font-light leading-relaxed border-l border-brand-accent/30 pl-6 italic">
-              "{config.storyQuote}"
+             <p className="text-zinc-600 text-[11px] font-mono leading-relaxed border-l border-brand-accent/30 pl-6 uppercase tracking-wider">
+              {config.storyQuote}
             </p>
           </div>
         </div>
@@ -32,20 +32,20 @@ export default function StorySection() {
               className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start group"
             >
               <div className="md:col-span-3">
-                <span className="text-7xl md:text-9xl font-mono font-bold text-white/5 group-hover:text-brand-accent/10 transition-colors leading-none tracking-tighter">
+                <span className="text-7xl md:text-9xl font-mono font-black text-white/[0.02] group-hover:text-brand-accent/10 transition-colors leading-none tracking-tighter">
                   {point.year}
                 </span>
               </div>
               
               <div className="md:col-span-1 hidden md:flex justify-center pt-8">
-                <div className="w-px h-full bg-white/5 relative">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-brand-accent" />
+                <div className="w-[1px] h-full bg-white/[0.03] relative">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-none bg-brand-accent glow-green" />
                 </div>
               </div>
 
-              <div className="md:col-span-8 pt-4 md:pt-8 opacity-60 group-hover:opacity-100 transition-opacity">
-                <h3 className="text-2xl md:text-3xl font-bold mb-6 tracking-tight font-sans uppercase">{point.title}</h3>
-                <p className="text-zinc-400 text-lg leading-relaxed max-w-2xl font-light">
+              <div className="md:col-span-8 pt-4 md:pt-8 opacity-40 group-hover:opacity-100 transition-opacity">
+                <h3 className="text-2xl md:text-3xl font-black mb-6 tracking-tight font-sans uppercase">{point.title}</h3>
+                <p className="text-zinc-500 text-sm leading-relaxed max-w-2xl font-light">
                   {point.description}
                 </p>
               </div>

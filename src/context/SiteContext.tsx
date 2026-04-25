@@ -27,6 +27,12 @@ interface SiteConfig {
   email: string;
   privacyPolicy: string;
   termsOfService: string;
+  contactPolicy?: string;
+  publicPolicy?: string;
+  returnPolicy?: string;
+  refundPolicy?: string;
+  contactSegment?: string;
+  heroVideo?: string;
 }
 
 interface SiteDataContextType {
@@ -64,8 +70,66 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     whatsapp: '+880XXXXXXXXX',
     tiktok: '',
     email: 'maniksheikh2006@gmail.com',
-    privacyPolicy: '',
-    termsOfService: ''
+    privacyPolicy: `At ICT Manik NY, we respect your privacy and are committed to protecting your personal information.
+
+Information We Collect:
+We may collect your name, email address, WhatsApp number, and any information you provide when contacting us or purchasing a product.
+
+How We Use Your Information:
+- To communicate with you بشأن your purchase
+- To provide access to products or services
+- To improve our services and user experience
+
+Data Protection:
+We do not sell, trade, or share your personal information with third parties. Your data is محفوظ and used only for service-related purposes.
+
+Third-Party Services:
+We may use third-party platforms like WhatsApp or email to communicate with you.
+
+Security:
+We take reasonable measures to protect your data, but we cannot guarantee 100% security over the internet.
+
+Changes:
+We may update this policy anytime. Continued use of the website means you accept the changes.
+
+Contact:
+If you have any questions, contact us at: ictmanikny@gmail.com`,
+    termsOfService: `By using this website, you agree to the following terms:
+
+Usage:
+All content provided on this website is for educational purposes only. You agree not to misuse any information.
+
+No Financial Advice:
+We do not provide financial advice. Trading involves risk, and you are responsible for your own decisions.
+
+Products & Access:
+After purchase, you will receive access to the product as described. Access may be revoked if misuse is detected.
+
+Payments:
+All payments are final unless stated otherwise. No refunds unless clearly mentioned.
+
+User Responsibility:
+You agree to provide accurate information and use the service respectfully.
+
+Modification:
+We reserve the right to change or update these terms at any time.
+
+Contact:
+ictmanikny@gmail.com`,
+    refundPolicy: `All sales are final.
+
+Due to the nature of digital products, we do not offer refunds after purchase.
+
+Please make sure to review all product details before buying.
+
+If you face any issue, contact us via WhatsApp or email.`,
+    contactSegment: `Email: ictmanikny@gmail.com  
+WhatsApp: +8801804130897  
+Telegram: https://t.me/ICTManikNY1`,
+    contactPolicy: '',
+    publicPolicy: '',
+    returnPolicy: '',
+    heroVideo: ''
   });
 
   useEffect(() => {

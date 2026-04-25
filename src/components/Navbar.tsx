@@ -23,10 +23,10 @@ export default function Navbar({ activeSection, onNavigate }: { activeSection: s
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5 px-6 md:px-10 py-6 flex justify-between items-center transition-all font-sans">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-2xl border-b border-white/[0.03] px-6 md:px-10 py-5 flex justify-between items-center transition-all font-sans">
         <div className="flex items-center gap-6">
           <Link to="/" className="group flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-brand-accent/10 border border-brand-accent/20 flex items-center justify-center font-mono font-bold text-brand-accent group-hover:bg-white group-hover:text-black transition-all overflow-hidden">
+            <div className="w-10 h-10 rounded-sm bg-brand-accent/5 border border-brand-accent/10 flex items-center justify-center font-mono font-bold text-brand-accent group-hover:bg-brand-accent group-hover:text-brand-bg transition-all overflow-hidden glow-green">
               {config.logoImage ? (
                 <img src={config.logoImage} alt={config.logoInitials} className="w-full h-full object-cover" />
               ) : (
@@ -34,20 +34,20 @@ export default function Navbar({ activeSection, onNavigate }: { activeSection: s
               )}
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-sm font-bold uppercase tracking-widest leading-none mb-1">{config.logoName}</h1>
-              <p className="text-[9px] text-zinc-600 uppercase tracking-[0.3em] font-medium leading-none">{config.tagline}</p>
+              <h1 className="text-sm font-black uppercase tracking-[0.15em] leading-none mb-1">{config.logoName}</h1>
+              <p className="text-[8px] text-zinc-600 uppercase tracking-[0.4em] font-medium leading-none">{config.tagline}</p>
             </div>
           </Link>
         </div>
 
-        <div className="hidden lg:flex gap-12 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">
+        <div className="hidden lg:flex gap-12 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-600">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
               className={cn(
-                "transition-all hover:text-white relative",
-                activeSection === item.id ? "text-brand-accent after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-brand-accent after:rounded-full" : ""
+                "transition-all hover:text-brand-accent relative",
+                activeSection === item.id ? "text-brand-accent" : ""
               )}
             >
               {item.label}
@@ -56,12 +56,12 @@ export default function Navbar({ activeSection, onNavigate }: { activeSection: s
         </div>
 
         <div className="flex items-center gap-4 sm:gap-8">
-          <Link to="/login" className="hidden xs:block text-[10px] font-bold uppercase tracking-widest text-zinc-600 hover:text-white transition-colors">
+          <Link to="/login" className="hidden xs:block text-[9px] font-bold uppercase tracking-widest text-zinc-600 hover:text-white transition-colors">
             ADMIN
           </Link>
           <button 
             onClick={() => onNavigate('store')} 
-            className="hidden sm:block px-6 py-2 bg-brand-accent text-brand-bg text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-all shadow-lg shadow-brand-accent/5"
+            className="hidden sm:block px-6 py-2.5 bg-brand-accent text-brand-bg text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white transition-all glow-green-hover"
           >
             COURSE
           </button>

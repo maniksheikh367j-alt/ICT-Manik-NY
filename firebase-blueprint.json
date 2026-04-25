@@ -64,7 +64,15 @@
         "storyQuote": { "type": "string" },
         "telegram": { "type": "string" },
         "whatsapp": { "type": "string" },
-        "email": { "type": "string" }
+        "email": { "type": "string" },
+        "privacyPolicy": { "type": "string" },
+        "termsOfService": { "type": "string" },
+        "contactPolicy": { "type": "string" },
+        "publicPolicy": { "type": "string" },
+        "returnPolicy": { "type": "string" },
+        "refundPolicy": { "type": "string" },
+        "contactSegment": { "type": "string" },
+        "heroVideo": { "type": "string" }
       }
     }
   },

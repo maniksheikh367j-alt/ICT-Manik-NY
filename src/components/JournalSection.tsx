@@ -27,7 +27,7 @@ export default function JournalSection() {
 
   return (
     <section id="journal" className="py-32 px-6 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(16,185,129,0.05),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(0,255,159,0.03),transparent_50%)]" />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-20">
           <div>
@@ -36,7 +36,7 @@ export default function JournalSection() {
               Performance <span className="text-brand-accent">Verification.</span>
             </h2>
           </div>
-          <p className="text-zinc-500 text-[10px] font-mono tracking-widest uppercase pb-4">Status: Optimal</p>
+          <p className="text-zinc-600 text-[10px] font-mono tracking-widest uppercase pb-4">Stream: 256-bit Encrypted</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -46,12 +46,12 @@ export default function JournalSection() {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.1 }}
               key={stat.label}
-              className="bg-zinc-950 border border-white/5 p-12 group hover:border-brand-accent/20 transition-all"
+              className="bg-black/40 border border-white/[0.03] p-12 group hover:border-brand-accent/30 transition-all cursor-default"
             >
-              <p className="text-[10px] text-zinc-600 font-mono font-bold tracking-[0.2em] mb-8 uppercase group-hover:text-zinc-400">{stat.label}</p>
+              <p className="text-[10px] text-zinc-700 font-mono font-bold tracking-[0.2em] mb-8 uppercase group-hover:text-zinc-500 transition-colors">{stat.label}</p>
               <h4 className={cn(
-                "text-4xl font-mono font-black tracking-tighter",
-                stat.value >= 0 ? "text-brand-accent" : "text-rose-500"
+                "text-4xl font-mono font-black tracking-tighter transition-all",
+                stat.value >= 0 ? "text-brand-accent group-hover:drop-shadow-[0_0_10px_rgba(0,255,159,0.3)]" : "text-rose-600"
               )}>
                 {stat.isRaw ? `${stat.value}%` : `${stat.value >= 0 ? '+' : '-'}$${Math.abs(stat.value).toLocaleString()}`}
               </h4>

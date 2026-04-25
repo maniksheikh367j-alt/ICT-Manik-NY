@@ -57,7 +57,9 @@ export const PRODUCTS: Product[] = [
     name: 'মাস্টার অফ প্রাইস অ্যাকশন',
     description: 'শূন্য থেকে শুরু করে অ্যাডভান্সড ক্যান্ডেলস্টিক সাইকোলজি শেখার কমপ্লিট কোর্স।',
     type: 'course',
-    status: 'coming_soon',
+    status: 'available',
+    price: '$49',
+    originalPrice: '$99',
     image: 'https://images.unsplash.com/photo-1611974714553-38827902096a?auto=format&fit=crop&q=80&w=800'
   },
   {
@@ -65,7 +67,9 @@ export const PRODUCTS: Product[] = [
     name: 'স্মার্ট মানি ইন্ডিকেটর (Pro)',
     description: 'অটোমেটেড সাপোর্ট-রেজিস্ট্যান্স এবং ভলিউম অ্যানালাইসিস টুলস।',
     type: 'indicator',
-    status: 'coming_soon',
+    status: 'available',
+    price: '$35',
+    originalPrice: '$75',
     image: 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&q=80&w=800'
   }
 ];

@@ -35,24 +35,24 @@ export default function StoreSection() {
   };
 
   return (
-    <section id="store" className="py-32 px-6 relative overflow-hidden bg-black/20">
-      <div className="absolute inset-x-0 top-0 h-px bg-white/5" />
+    <section id="store" className="py-32 px-6 relative overflow-hidden">
+      <div className="absolute inset-x-0 top-0 h-px bg-white/[0.03]" />
       
       {/* Product Details Modal */}
       <AnimatePresence>
         {selectedProduct && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/95 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/95 backdrop-blur-md">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.98, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-zinc-950 border border-white/10 w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-none relative custom-scrollbar flex flex-col md:flex-row"
+              exit={{ opacity: 0, scale: 0.98, y: 10 }}
+              className="bg-[#0f0f0f] border border-white/[0.05] w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-none relative custom-scrollbar flex flex-col md:flex-row shadow-2xl shadow-brand-accent/5"
             >
-              <div className="md:w-1/2 aspect-square md:aspect-auto bg-zinc-900 border-r border-white/5">
+              <div className="md:w-1/2 aspect-square md:aspect-auto bg-zinc-950 border-r border-white/[0.03]">
                 {selectedProduct.image ? (
                   <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full h-full object-cover grayscale" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-zinc-800">
+                  <div className="w-full h-full flex items-center justify-center text-zinc-900">
                     <ShoppingCart size={80} strokeWidth={0.5} />
                   </div>
                 )}
@@ -61,22 +61,49 @@ export default function StoreSection() {
               <div className="md:w-1/2 p-10 flex flex-col justify-between">
                 <button 
                   onClick={() => setSelectedProduct(null)}
-                  className="absolute top-6 right-6 text-zinc-500 hover:text-white transition-colors p-2"
+                  className="absolute top-6 right-6 text-zinc-600 hover:text-white transition-colors p-2"
                 >
                   <X size={24} />
                 </button>
 
                 <div>
-                  <span className="text-[10px] font-mono font-bold text-brand-accent uppercase tracking-[0.3em] mb-4 block">
+                  <span className="text-[10px] font-mono font-bold text-brand-accent uppercase tracking-[0.4em] mb-4 block">
                     {selectedProduct.type}
                   </span>
-                  <h3 className="text-3xl md:text-5xl font-bold uppercase tracking-tighter mb-6 text-white leading-none">{selectedProduct.name}</h3>
+                  <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-2 text-white leading-none">{selectedProduct.name}</h3>
+                  
+                  <div className="flex flex-col gap-4 mb-8">
+                    <div className="flex items-center gap-4">
+                      <div className="relative group/price flex items-baseline gap-1">
+                        <span className="text-brand-accent/50 text-2xl md:text-3xl font-mono font-bold">$</span>
+                        <span className={`font-black tracking-tighter text-brand-accent text-glow-green leading-none ${
+                          selectedProduct.priceSize === 'sm' ? 'text-2xl' : 
+                          selectedProduct.priceSize === 'lg' ? 'text-6xl' : 
+                          selectedProduct.priceSize === 'xl' ? 'text-7xl' : 'text-4xl md:text-6xl'
+                        }`}>
+                          {selectedProduct.price?.toString().replace('$', '') || '0'}
+                        </span>
+                      </div>
+                      
+                      {selectedProduct.originalPrice && (
+                        <div className="flex flex-col">
+                          <span className="text-zinc-600 line-through text-lg md:text-xl font-medium tracking-tighter opacity-50 uppercase mb-1">
+                            {selectedProduct.priceFormat === 'short' && selectedProduct.originalPrice.includes('.') ? selectedProduct.originalPrice.split('.')[0] : selectedProduct.originalPrice}
+                          </span>
+                          <span className="bg-brand-accent/10 border border-brand-accent/20 text-brand-accent text-[8px] font-black px-2 py-0.5 tracking-widest uppercase">
+                            Best Offer
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   <p className="text-zinc-500 text-sm leading-relaxed mb-8 font-light">{selectedProduct.description}</p>
                   
-                  <div className="space-y-4 mb-8 pt-8 border-t border-white/5">
+                  <div className="space-y-4 mb-8 pt-8 border-t border-white/[0.03]">
                     {selectedProduct.details?.split('\n').map((detail, idx) => (
-                      <div key={idx} className="flex gap-4 text-[11px] text-zinc-400 font-medium items-center">
-                        <CheckCircle2 size={16} className="text-brand-accent shrink-0" />
+                      <div key={idx} className="flex gap-4 text-[10px] uppercase tracking-wider text-zinc-500 font-bold items-center">
+                        <div className="w-1 h-1 bg-brand-accent" />
                         {detail}
                       </div>
                     ))}
@@ -86,9 +113,9 @@ export default function StoreSection() {
                 <div className="flex flex-col gap-3 mt-8">
                   <button 
                     onClick={() => openWhatsApp(selectedProduct)}
-                    className="w-full py-5 bg-brand-accent text-brand-bg font-black uppercase tracking-widest text-[11px] hover:bg-white transition-all shadow-xl shadow-brand-accent/20 flex items-center justify-center gap-3"
+                    className="w-full py-5 bg-brand-accent text-brand-bg font-black uppercase tracking-[0.2em] text-[10px] hover:bg-white transition-all glow-green-hover flex items-center justify-center gap-3"
                   >
-                    <MessageCircle size={18} /> BUY NOW VIA WHATSAPP
+                    <MessageCircle size={14} /> BUY NOW VIA WHATSAPP
                   </button>
                 </div>
               </div>
@@ -101,25 +128,25 @@ export default function StoreSection() {
         <div className="flex flex-col md:flex-row justify-between items-end gap-12 mb-20">
           <div className="max-w-2xl">
             <p className="text-[10px] text-brand-accent font-mono font-bold tracking-[0.4em] uppercase mb-6">Marketplace</p>
-            <h2 className="text-5xl md:text-8xl font-bold leading-[0.85] tracking-tighter mb-8 uppercase">
+            <h2 className="text-5xl md:text-8xl font-black leading-[0.85] tracking-tighter mb-8 uppercase">
               Trading <br/><span className="text-brand-accent">Precision</span> Hub.
             </h2>
-            <p className="text-zinc-500 text-sm font-light leading-relaxed max-w-sm">
+            <p className="text-zinc-600 text-sm font-light leading-relaxed max-w-sm uppercase tracking-widest text-[10px]">
               Acquire elite institutional tools and mentorship programs processed through algorithmic logic.
             </p>
           </div>
           <div className="flex gap-4">
             <button 
               onClick={() => handleScroll('left')}
-              className="w-16 h-16 bg-white/[0.02] border border-white/5 flex items-center justify-center hover:bg-brand-accent hover:text-brand-bg transition-all"
+              className="w-14 h-14 bg-white/[0.02] border border-white/[0.05] flex items-center justify-center hover:bg-brand-accent hover:text-brand-bg transition-all"
             >
-              <ArrowRight className="rotate-180" size={24} />
+              <ArrowRight className="rotate-180" size={20} />
             </button>
             <button 
               onClick={() => handleScroll('right')}
-              className="w-16 h-16 bg-white/[0.02] border border-white/5 flex items-center justify-center hover:bg-brand-accent hover:text-brand-bg transition-all"
+              className="w-14 h-14 bg-white/[0.02] border border-white/[0.05] flex items-center justify-center hover:bg-brand-accent hover:text-brand-bg transition-all"
             >
-              <ArrowRight size={24} />
+              <ArrowRight size={20} />
             </button>
           </div>
         </div>
@@ -135,18 +162,18 @@ export default function StoreSection() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
               viewport={{ once: true }}
-              className="min-w-[85vw] sm:min-w-[420px] snap-start flex flex-col group relative bg-black/40 border border-white/5 p-8 sm:p-10"
+              className="min-w-[85vw] sm:min-w-[420px] snap-start flex flex-col group relative bg-black/40 border border-white/[0.03] p-8 sm:p-10"
             >
-              <div className="relative aspect-video bg-zinc-900 border border-white/5 overflow-hidden mb-10">
+              <div className="relative aspect-video bg-zinc-950 border border-white/[0.03] overflow-hidden mb-10">
                 {product.image ? (
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-zinc-800">
+                  <div className="w-full h-full flex items-center justify-center text-zinc-900 opacity-20">
                     <ShoppingCart size={48} strokeWidth={0.5} />
                   </div>
                 )}
                 <div className="absolute top-6 left-6">
-                  <span className="bg-brand-bg/90 backdrop-blur-xl border border-white/10 text-white text-[9px] px-4 py-2 font-mono font-bold uppercase tracking-widest flex items-center gap-2">
+                  <span className="bg-brand-bg/90 backdrop-blur-xl border border-white/[0.05] text-brand-accent text-[9px] px-4 py-2 font-mono font-bold uppercase tracking-widest flex items-center gap-2">
                     {product.status === 'coming_soon' ? <Lock size={10} strokeWidth={3} /> : null}
                     {product.status?.toUpperCase().replace('_', ' ')}
                   </span>
@@ -154,25 +181,52 @@ export default function StoreSection() {
               </div>
 
               <div className="flex-1">
-                <span className="text-[9px] text-brand-accent font-mono font-bold tracking-widest mb-2 block uppercase">{product.type}</span>
-                <h3 className="text-3xl font-bold uppercase tracking-tighter mb-4 group-hover:text-brand-accent transition-colors leading-none">{product.name}</h3>
-                <p className="text-zinc-500 text-sm font-light leading-relaxed mb-12 line-clamp-2">
+                <span className="text-[9px] text-brand-accent font-mono font-bold tracking-[0.4em] mb-2 block uppercase">{product.type}</span>
+                <h2 className="text-3xl font-black uppercase tracking-tighter mb-2 group-hover:text-brand-accent transition-colors leading-none">{product.name}</h2>
+                
+                <div className="flex flex-col gap-1 mb-6">
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-baseline gap-0.5">
+                      <span className="text-brand-accent/40 text-sm font-mono font-bold">$</span>
+                      <span className={`font-black tracking-tighter text-brand-accent text-glow-green ${
+                        product.priceSize === 'sm' ? 'text-xl' : 
+                        product.priceSize === 'lg' ? 'text-4xl' : 
+                        product.priceSize === 'xl' ? 'text-5xl' : 'text-3xl'
+                      }`}>
+                        {product.price?.toString().replace('$', '') || '0'}
+                      </span>
+                    </div>
+                    
+                    {product.originalPrice && (
+                      <div className="flex items-center gap-3">
+                        <span className="text-zinc-700 line-through text-sm font-medium tracking-tighter opacity-40">
+                          {product.priceFormat === 'short' && product.originalPrice.includes('.') ? product.originalPrice.split('.')[0] : product.originalPrice}
+                        </span>
+                        <span className="text-[8px] font-black text-brand-accent border border-brand-accent/30 px-2 py-0.5 tracking-widest uppercase bg-brand-accent/5">
+                          Sale
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <p className="text-zinc-600 text-sm font-light leading-relaxed mb-12 line-clamp-2">
                   {product.description}
                 </p>
               </div>
 
-              <div className="flex flex-col gap-4 pt-10 border-t border-white/10">
+              <div className="grid grid-cols-2 gap-4 pt-10 border-t border-white/[0.03]">
                 <button 
                   onClick={() => setSelectedProduct(product)}
-                  className="w-full text-[10px] font-bold uppercase tracking-[0.2em] border border-white/10 text-zinc-400 py-5 hover:bg-white/5 transition-all"
+                  className="w-full text-[9px] font-bold uppercase tracking-[0.3em] border border-white/[0.05] text-zinc-600 py-5 hover:bg-white/5 transition-all text-center"
                 >
-                  DETAILS
+                  INFO
                 </button>
                 <button 
                   onClick={() => openWhatsApp(product)}
-                  className="w-full text-[10px] font-bold uppercase tracking-[0.2em] bg-brand-accent text-brand-bg py-5 hover:bg-white transition-all shadow-lg shadow-brand-accent/10"
+                  className="w-full text-[9px] font-black uppercase tracking-[0.3em] bg-brand-accent text-brand-bg py-5 hover:bg-white transition-all glow-green-hover text-center"
                 >
-                  BUY NOW
+                  ACQUIRE
                 </button>
               </div>
             </motion.div>

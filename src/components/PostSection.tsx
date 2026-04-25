@@ -48,17 +48,17 @@ export default function PostSection() {
                 </div>
               </div>
 
-              <h3 className="text-3xl font-serif italic font-bold mb-6 tracking-tight group-hover:text-brand-accent transition-colors leading-tight">
+              <h3 className="text-2xl font-black mb-6 tracking-tighter group-hover:text-brand-accent transition-colors leading-tight uppercase">
                 {post.title}
               </h3>
               
-              <div className="text-zinc-500 text-sm leading-relaxed font-light line-clamp-4 mb-8">
+              <div className="text-zinc-500 text-sm leading-relaxed font-light line-clamp-3 mb-8">
                 {post.content}
               </div>
 
               <div className="mt-auto pt-8 border-t border-white/5">
-                <button className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 group-hover:text-brand-accent transition-colors flex items-center gap-3">
-                    READ_INTEL <span className="w-8 h-px bg-zinc-800 group-hover:bg-brand-accent group-hover:w-12 transition-all" />
+                <button className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 group-hover:text-brand-accent transition-colors flex items-center gap-3">
+                    DECRYPT_INFO <span className="w-8 h-px bg-zinc-900 group-hover:bg-brand-accent group-hover:w-12 transition-all" />
                 </button>
               </div>
             </motion.article>

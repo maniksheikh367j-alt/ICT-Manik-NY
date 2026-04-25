@@ -29,8 +29,11 @@ export interface Product {
   name: string;
   description: string;
   details?: string;
-  type: 'course' | 'indicator';
-  status: 'coming_soon' | 'available';
-  price?: string;
+  type: string;
+  status: 'coming_soon' | 'available' | 'sold_out';
+  price: string;
+  originalPrice?: string;
+  priceSize?: 'sm' | 'md' | 'lg' | 'xl';
+  priceFormat?: 'short' | 'long';
   image?: string;
 }

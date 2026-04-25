@@ -10,44 +10,68 @@ export default function PolicyPage() {
   const query = new URLSearchParams(location.search);
   const type = query.get('type') || 'privacy';
 
-  const title = type === 'privacy' ? 'Privacy Policy' : 'Terms of Service';
-  const content = type === 'privacy' ? config.privacyPolicy : config.termsOfService;
-  const Icon = type === 'privacy' ? ShieldCheck : ScrollText;
+  const getPolicyData = () => {
+    switch (type) {
+      case 'terms':
+        return { title: 'Terms of Service', content: config.termsOfService, icon: ScrollText };
+      case 'contact_policy':
+        return { title: 'Contact Policy', content: config.contactPolicy, icon: ScrollText };
+      case 'public':
+        return { title: 'Public Policy', content: config.publicPolicy, icon: ShieldCheck };
+      case 'return':
+        return { title: 'Return Policy', content: config.returnPolicy, icon: ShieldCheck };
+      case 'refund':
+        return { title: 'Refund Policy', content: config.refundPolicy, icon: ShieldCheck };
+      case 'contact_segment':
+        return { title: 'Contact Us', content: config.contactSegment, icon: ShieldCheck };
+      case 'privacy':
+      default:
+        return { title: 'Privacy Policy', content: config.privacyPolicy, icon: ShieldCheck };
+    }
+  };
 
-  if (!content) return <Navigate to="/" />;
+  const { title, content, icon: Icon } = getPolicyData();
+
+  if (!content && type !== 'privacy') return <Navigate to="/" />;
 
   return (
-    <div className="min-h-screen bg-brand-bg text-brand-text selection:bg-brand-accent/20">
-      <nav className="p-8 flex justify-between items-center border-b border-white/5 bg-black/20 backdrop-blur-md sticky top-0 z-50">
-        <Link to="/" className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors uppercase text-[10px] tracking-widest font-bold">
-          <ChevronLeft size={16} /> Back to Terminal
+    <div className="min-h-screen bg-brand-bg text-brand-text selection:bg-brand-accent/20 font-sans">
+      <nav className="px-10 py-8 flex justify-between items-center border-b border-white/[0.03] bg-black/40 backdrop-blur-xl sticky top-0 z-50">
+        <Link to="/" className="flex items-center gap-2 text-zinc-600 hover:text-white transition-colors uppercase text-[10px] tracking-[0.3em] font-black group">
+          <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> Back_To_System
         </Link>
-        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-accent">{config.logoName} Legal</span>
+        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-accent glow-green">{config.logoName} _ PROTOCOL</span>
       </nav>
 
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl mx-auto py-24 px-10"
+        className="max-w-4xl mx-auto py-32 px-10"
       >
-        <div className="flex flex-col items-center mb-16 text-center">
-          <div className="w-16 h-16 bg-brand-accent/10 rounded-full flex items-center justify-center text-brand-accent mb-6 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
-            <Icon size={32} />
+        <div className="flex flex-col items-center mb-24 text-center">
+          <div className="w-16 h-16 bg-brand-accent/5 border border-white/[0.05] flex items-center justify-center text-brand-accent mb-10 glow-green">
+            <Icon size={24} strokeWidth={1} />
           </div>
-          <h1 className="text-5xl font-bold tracking-tight mb-4">{title}</h1>
-          <p className="text-zinc-500 uppercase text-[10px] tracking-[0.2em]">Latest Update: {new Date().toLocaleDateString()}</p>
+          <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 uppercase leading-none">{title}</h1>
+          <div className="flex items-center gap-4">
+            <div className="h-px w-8 bg-brand-accent/30" />
+            <p className="text-zinc-600 uppercase text-[10px] tracking-[0.4em] font-bold">Protocol Revision: {new Date().getFullYear()}.04.23</p>
+            <div className="h-px w-8 bg-brand-accent/30" />
+          </div>
         </div>
 
-        <div className="card p-12 bg-white/5 border-white/5">
+        <div className="border border-white/[0.03] bg-white/[0.01] p-12 md:p-20 shadow-2xl shadow-black/40">
           <div className="prose prose-invert max-w-none">
-            <p className="text-zinc-300 leading-offset whitespace-pre-wrap font-sans text-lg">
+            <p className="text-zinc-500 leading-relaxed whitespace-pre-wrap font-sans text-base tracking-wide font-light">
               {content}
             </p>
           </div>
         </div>
 
-        <div className="mt-20 text-center text-zinc-600 text-[10px] uppercase tracking-widest">
-            End of Official Document
+        <div className="mt-24 text-center text-zinc-800 text-[9px] uppercase tracking-[0.8em] flex items-center justify-center gap-6">
+            <div className="h-px w-12 bg-zinc-900" />
+            End_Of_Transmission
+            <div className="h-px w-12 bg-zinc-900" />
         </div>
       </motion.div>
     </div>
