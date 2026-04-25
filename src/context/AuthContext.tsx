@@ -53,20 +53,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithPassword = async (username: string, password: string) => {
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      try {
-        await signInAnonymously(auth);
-        setIsPasscodeAdmin(true);
-        localStorage.setItem('admin_auth', 'true');
-        return true;
-      } catch (error: any) {
-        console.error('Error signing in anonymously:', error);
-        if (error.code === 'auth/operation-not-allowed' || error.code === 'auth/admin-restricted-operation') {
-          alert('ACTION REQUIRED: Anonymous Authentication is disabled or restricted in your Firebase Console.\n\nPlease follow these steps:\n1. Go to Firebase Console > Authentication > Sign-in method.\n2. Enable "Anonymous" provider.\n3. If you use Identity Platform, ensure "Enable create operation" is NOT blocked.');
-        } else {
-          alert('LOGIN_ERROR: ' + (error.message || 'Unknown authentication error'));
-        }
-        return false;
-      }
+      setIsPasscodeAdmin(true);
+      localStorage.setItem('admin_auth', 'true');
+      
+      // Attempt anonymous auth in the background for Firestore access, but don't block login if it fails
+      signInAnonymously(auth).catch(error => {
+        console.warn('Firebase Anonymous Auth failed. Some database operations might be restricted if rules require authentication.', error);
+      });
+      
+      return true;
     }
     return false;
   };
