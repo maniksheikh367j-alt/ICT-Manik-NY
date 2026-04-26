@@ -9,6 +9,30 @@ export default function AdminDashboard() {
   const { logs, story, products, posts, config, updateLogs, updateStory, updateProducts, updatePosts, updateConfig, saveAll, loading } = useSiteData();
   const [activeTab, setActiveTab] = useState<'journal' | 'story' | 'products' | 'posts' | 'settings' | 'policies'>('journal');
   const [isSaving, setIsSaving] = useState(false);
+  const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
+
+  // Auto-save effect
+  React.useEffect(() => {
+    if (!autoSaveEnabled) return;
+    
+    const timer = setTimeout(async () => {
+      // Check if there are changes worth saving? 
+      // For simplicity, we just save whenever state changes if autosave is on
+      // We use a longer debounce to avoid hitting quotas too fast
+      if (!loading && !isSaving) {
+        setIsSaving(true);
+        try {
+          await saveAll(true);
+        } catch (e) {
+          console.error('Auto-save failed:', e);
+        } finally {
+          setIsSaving(false);
+        }
+      }
+    }, 5000); // 5 second debounce for auto-save
+
+    return () => clearTimeout(timer);
+  }, [logs, story, products, posts, config, autoSaveEnabled]);
 
   const handleManualSync = async () => {
     setIsSaving(true);
@@ -93,6 +117,17 @@ export default function AdminDashboard() {
             <p className="text-zinc-400 text-[9px] tracking-[0.4em] uppercase font-bold">Operator: ICT MANIK NY Authority</p>
           </div>
           <div className="flex items-center justify-between w-full sm:w-auto gap-8 border-t sm:border-t-0 border-white/[0.03] pt-6 sm:pt-0">
+            <div className="flex items-center gap-4 bg-white/[0.02] border border-white/[0.05] px-4 py-2.5 rounded-lg group">
+              <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-colors ${autoSaveEnabled ? 'text-brand-accent' : 'text-zinc-600'}`}>
+                {autoSaveEnabled ? 'Auto_Sync_Active' : 'Auto_Sync_Paused'}
+              </span>
+              <button 
+                onClick={() => setAutoSaveEnabled(!autoSaveEnabled)}
+                className={`w-8 h-4 rounded-full relative transition-colors ${autoSaveEnabled ? 'bg-brand-accent/20' : 'bg-zinc-800'}`}
+              >
+                <div className={`absolute top-0.5 w-3 h-3 rounded-full transition-all ${autoSaveEnabled ? 'left-4.5 bg-brand-accent shadow-[0_0_8px_rgba(0,234,255,0.5)]' : 'left-0.5 bg-zinc-600'}`} />
+              </button>
+            </div>
             <button 
               onClick={handleManualSync}
               disabled={isSaving}

@@ -47,7 +47,7 @@ interface SiteDataContextType {
   updateProducts: (products: Product[], sync?: boolean) => Promise<void>;
   updatePosts: (posts: BlogPost[], sync?: boolean) => Promise<void>;
   updateConfig: (config: SiteConfig, sync?: boolean) => Promise<void>;
-  saveAll: () => Promise<void>;
+  saveAll: (silent?: boolean) => Promise<void>;
 }
 
 const SiteDataContext = createContext<SiteDataContextType | undefined>(undefined);
@@ -247,9 +247,9 @@ Telegram: https://t.me/ICTManikNY1`,
     }
   };
 
-  const saveAll = async () => {
+  const saveAll = async (silent = false) => {
     try {
-      console.log('Initiating global sync...');
+      if (!silent) console.log('Initiating global sync...');
       // Sync all current states to Firestore
       // Use standard promises to ensure all writes complete
       const promises = [
@@ -261,8 +261,10 @@ Telegram: https://t.me/ICTManikNY1`,
       ];
       
       await Promise.all(promises);
-      console.log('Global sync completed successfully.');
-      alert('SYSTEM_DATA_SYNC_COMPLETE: All records securely preserved in Cloud.');
+      if (!silent) {
+        console.log('Global sync completed successfully.');
+        alert('SYSTEM_DATA_SYNC_COMPLETE: All records securely preserved in Cloud.');
+      }
     } catch (e) {
       handleFirestoreError(e, 'saveAll');
     }
