@@ -74,15 +74,18 @@ export default function StoreSection() {
                   
                   <div className="flex flex-col gap-4 mb-8">
                     <div className="flex items-center gap-4">
-                      <div className="relative group/price flex items-baseline gap-1">
-                        <span className="text-brand-accent/50 text-2xl md:text-3xl font-mono font-bold">$</span>
-                        <span className={`font-black tracking-tighter text-brand-accent text-glow-green leading-none ${
-                          selectedProduct.priceSize === 'sm' ? 'text-2xl' : 
-                          selectedProduct.priceSize === 'lg' ? 'text-6xl' : 
-                          selectedProduct.priceSize === 'xl' ? 'text-7xl' : 'text-4xl md:text-6xl'
-                        }`}>
-                          {selectedProduct.price?.toString().replace('$', '') || '0'}
-                        </span>
+                      <div className="flex flex-col items-start gap-1">
+                        <div className="relative group/price flex items-baseline gap-1">
+                          <span className="text-brand-accent/50 text-xl font-mono font-bold">$</span>
+                          <span className={`font-black tracking-tighter text-brand-accent text-glow-green leading-none ${
+                            selectedProduct.priceSize === 'sm' ? 'text-base' : 
+                            selectedProduct.priceSize === 'lg' ? 'text-3xl' : 
+                            selectedProduct.priceSize === 'xl' ? 'text-4xl' : 'text-xl md:text-3xl'
+                          }`}>
+                            {selectedProduct.price?.toString().replace('$', '') || '0'}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-zinc-600 font-bold tracking-[0.2em] uppercase">buy now</span>
                       </div>
                       
                       {selectedProduct.originalPrice && (
@@ -185,28 +188,28 @@ export default function StoreSection() {
                 <h2 className="text-3xl font-black uppercase tracking-tighter mb-2 group-hover:text-brand-accent transition-colors leading-none">{product.name}</h2>
                 
                 <div className="flex flex-col gap-1 mb-6">
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-baseline gap-0.5">
-                      <span className="text-brand-accent/40 text-sm font-mono font-bold">$</span>
-                      <span className={`font-black tracking-tighter text-brand-accent text-glow-green ${
-                        product.priceSize === 'sm' ? 'text-xl' : 
-                        product.priceSize === 'lg' ? 'text-4xl' : 
-                        product.priceSize === 'xl' ? 'text-5xl' : 'text-3xl'
-                      }`}>
-                        {product.price?.toString().replace('$', '') || '0'}
-                      </span>
-                    </div>
-                    
-                    {product.originalPrice && (
-                      <div className="flex items-center gap-3">
-                        <span className="text-zinc-700 line-through text-sm font-medium tracking-tighter opacity-40">
-                          {product.priceFormat === 'short' && product.originalPrice.includes('.') ? product.originalPrice.split('.')[0] : product.originalPrice}
-                        </span>
-                        <span className="text-[8px] font-black text-brand-accent border border-brand-accent/30 px-2 py-0.5 tracking-widest uppercase bg-brand-accent/5">
-                          Sale
+                  <div className="flex flex-col items-start">
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-baseline gap-0.5">
+                        <span className="text-brand-accent/40 text-base font-mono font-bold">$</span>
+                        <span className={`font-black tracking-tighter text-brand-accent text-glow-green leading-none ${
+                          product.priceSize === 'sm' ? 'text-xs' : 
+                          product.priceSize === 'lg' ? 'text-lg' : 
+                          product.priceSize === 'xl' ? 'text-xl' : 'text-base'
+                        }`}>
+                          {product.price?.toString().replace('$', '') || '0'}
                         </span>
                       </div>
-                    )}
+                      
+                      {product.originalPrice && (
+                        <div className="flex items-center gap-3">
+                          <span className="text-zinc-700 line-through text-[9px] font-medium tracking-tighter opacity-40">
+                            {product.priceFormat === 'short' && product.originalPrice.includes('.') ? product.originalPrice.split('.')[0] : product.originalPrice}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-[9px] text-zinc-600 font-bold tracking-[0.2em] uppercase mt-1">buy now</span>
                   </div>
                 </div>
 
