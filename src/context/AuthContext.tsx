@@ -28,6 +28,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (username: string, password: string): Promise<boolean> => {
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      try {
+        // Attempt to sign in anonymously to satisfy Firestore rules if they require authentication
+        await signInAnonymously(auth);
+      } catch (error) {
+        console.warn('Silent sign-in failed, continuing with local admin session:', error);
+      }
       setIsAdmin(true);
       localStorage.setItem('admin_session', 'active');
       return true;
@@ -35,7 +41,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await firebaseLogout();
+    } catch (e) {
+      console.error('Logout error:', e);
+    }
     setIsAdmin(false);
     localStorage.removeItem('admin_session');
   };

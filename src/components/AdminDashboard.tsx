@@ -96,15 +96,18 @@ export default function AdminDashboard() {
             <button 
               onClick={handleManualSync}
               disabled={isSaving}
-              className="flex items-center gap-2 px-8 py-3 bg-brand-accent text-brand-bg text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white transition-all glow-green-hover disabled:opacity-50"
+              className="flex items-center gap-2 px-8 py-3 bg-brand-accent text-brand-bg text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white transition-all glow-green-hover disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save size={14} /> {isSaving ? 'SYNCING...' : 'SYNC TO CLOUD'}
+              <Save size={14} className={isSaving ? 'animate-spin' : ''} /> {isSaving ? 'UPLOADING...' : 'SAVE & SYNC CLOUD'}
             </button>
             <button 
-              onClick={() => { logout(); window.location.href = '/'; }}
+              onClick={async () => { 
+                await logout(); 
+                window.location.href = '/'; 
+              }}
               className="px-6 py-3 bg-white/[0.02] text-zinc-500 border border-white/[0.05] hover:bg-rose-600/10 hover:text-rose-500 hover:border-rose-600/30 transition-all text-[10px] font-bold uppercase tracking-[0.2em]"
             >
-              Sign Out
+              Exit Terminal
             </button>
           </div>
         </header>

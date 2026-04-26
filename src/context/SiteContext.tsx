@@ -249,13 +249,20 @@ Telegram: https://t.me/ICTManikNY1`,
 
   const saveAll = async () => {
     try {
+      console.log('Initiating global sync...');
       // Sync all current states to Firestore
-      for (const log of logs) { await setDoc(doc(db, 'logs', log.id), log); }
-      for (const s of story) { await setDoc(doc(db, 'stories', s.id), s); }
-      for (const p of products) { await setDoc(doc(db, 'products', p.id), p); }
-      for (const p of posts) { await setDoc(doc(db, 'posts', p.id), p); }
-      await setDoc(doc(db, 'config', 'settings'), config);
-      alert('ALL_STREAMS_SYNCED_SUCCESSFULLY');
+      // Use standard promises to ensure all writes complete
+      const promises = [
+        ...logs.map(log => setDoc(doc(db, 'logs', log.id), log)),
+        ...story.map(s => setDoc(doc(db, 'stories', s.id), s)),
+        ...products.map(p => setDoc(doc(db, 'products', p.id), p)),
+        ...posts.map(p => setDoc(doc(db, 'posts', p.id), p)),
+        setDoc(doc(db, 'config', 'settings'), config)
+      ];
+      
+      await Promise.all(promises);
+      console.log('Global sync completed successfully.');
+      alert('SYSTEM_DATA_SYNC_COMPLETE: All records securely preserved in Cloud.');
     } catch (e) {
       handleFirestoreError(e, 'saveAll');
     }
