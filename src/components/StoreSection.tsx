@@ -50,7 +50,7 @@ export default function StoreSection() {
             >
               <div className="md:w-1/2 aspect-square md:aspect-auto bg-zinc-950 border-r border-white/[0.03]">
                 {selectedProduct.image ? (
-                  <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full h-full object-cover grayscale" />
+                  <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-zinc-900">
                     <ShoppingCart size={80} strokeWidth={0.5} />
@@ -167,9 +167,9 @@ export default function StoreSection() {
               viewport={{ once: true }}
               className="min-w-[85vw] sm:min-w-[420px] snap-start flex flex-col group relative bg-black/40 border border-white/[0.03] p-8 sm:p-10"
             >
-              <div className="relative aspect-video bg-zinc-950 border border-white/[0.03] overflow-hidden mb-10">
+              <div className="relative aspect-video bg-zinc-950/50 border border-white/[0.03] overflow-hidden mb-10 group-hover:bg-zinc-900 transition-colors">
                 {product.image ? (
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000" />
+                  <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-all duration-700" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-zinc-900 opacity-20">
                     <ShoppingCart size={48} strokeWidth={0.5} />

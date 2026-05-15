@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useSiteData } from '../context/SiteContext';
 import { LogOut, Plus, Trash2, Save, BookOpen, User, ShoppingBag, Settings, FileText, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { compressImage } from '../lib/imageUtils';
 
 export default function AdminDashboard() {
   const { logout } = useAuth();
@@ -180,7 +181,10 @@ export default function AdminDashboard() {
                               const file = e.target.files?.[0];
                               if (file) {
                                 const reader = new FileReader();
-                                reader.onloadend = () => updateConfig({...config, logoImage: reader.result as string}, false);
+                                reader.onloadend = async () => {
+                                  const compressed = await compressImage(reader.result as string);
+                                  updateConfig({...config, logoImage: compressed}, false);
+                                };
                                 reader.readAsDataURL(file);
                               }
                             }} />
@@ -321,9 +325,9 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                       {products.map((product) => (
                         <div key={product.id} className="p-8 border border-white/[0.03] bg-white/[0.01] hover:bg-white/[0.02] transition-all flex flex-col group relative">
-                          <div className="relative aspect-video bg-zinc-950 border border-white/[0.03] mb-8 overflow-hidden">
+                          <div className="relative aspect-video bg-zinc-950/50 border border-white/[0.03] mb-8 overflow-hidden group-hover:bg-zinc-900 transition-colors">
                             {product.image ? (
-                              <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-105 group-hover:scale-100" />
+                              <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-all duration-700" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-zinc-900 text-[10px] uppercase font-black tracking-[0.5em]">No_Visual_Data</div>
                             )}
@@ -331,7 +335,10 @@ export default function AdminDashboard() {
                               const file = e.target.files?.[0];
                               if (file) {
                                 const reader = new FileReader();
-                                reader.onloadend = () => updateProducts(products.map(p => p.id === product.id ? {...p, image: reader.result as string} : p));
+                                reader.onloadend = async () => {
+                                  const compressed = await compressImage(reader.result as string);
+                                  updateProducts(products.map(p => p.id === product.id ? {...p, image: compressed} : p));
+                                };
                                 reader.readAsDataURL(file);
                               }
                             }} />
@@ -489,7 +496,10 @@ export default function AdminDashboard() {
                                 const file = e.target.files?.[0];
                                 if (file) {
                                   const reader = new FileReader();
-                                  reader.onloadend = () => updatePosts(posts.map(p => p.id === post.id ? {...p, image: reader.result as string} : p), false);
+                                  reader.onloadend = async () => {
+                                    const compressed = await compressImage(reader.result as string);
+                                    updatePosts(posts.map(p => p.id === post.id ? {...p, image: compressed} : p), false);
+                                  };
                                   reader.readAsDataURL(file);
                                 }
                               }} />

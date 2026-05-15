@@ -13,6 +13,7 @@ import {
 } from 'firebase/firestore';
 import { TRADING_LOGS, STORY_POINTS, PRODUCTS } from '../data';
 import { TradingLog, StoryPoint, Product, BlogPost } from '../types';
+import { compressImage } from '../lib/imageUtils';
 
 interface SiteConfig {
   logoName: string;
@@ -183,6 +184,8 @@ Telegram: https://t.me/ICTManikNY1`,
     console.error(`Firestore Error [${operation}]:`, error);
     if (error.code === 'resource-exhausted') {
       alert('QUOTA_EXCEEDED: Your Firebase free tier limit has been reached for today. Changes will be saved locally but might not sync to the cloud until tomorrow.');
+    } else if (error.message && error.message.includes('exceeds the maximum allowed size')) {
+      alert('SIZE_LIMIT_EXCEEDED: The document you are trying to save (likely due to a large image) exceeds the 1MB Firestore limit. The system is attempting to auto-compress images, but please try using a smaller or shorter content if this persists.');
     } else if (error.code === 'permission-denied') {
       alert('PERMISSION_DENIED: You do not have authority to write to this database. Please check your login status.');
     } else {
@@ -250,14 +253,36 @@ Telegram: https://t.me/ICTManikNY1`,
   const saveAll = async (silent = false) => {
     try {
       if (!silent) console.log('Initiating global sync...');
+
+      // Auto-compress large images before saving to stay under 1MB Firestore limit
+      const processedPosts = await Promise.all(posts.map(async p => {
+        if (p.image && p.image.startsWith('data:image')) {
+          const compressed = await compressImage(p.image);
+          return { ...p, image: compressed };
+        }
+        return p;
+      }));
+
+      const processedProducts = await Promise.all(products.map(async p => {
+        if (p.image && p.image.startsWith('data:image')) {
+          const compressed = await compressImage(p.image);
+          return { ...p, image: compressed };
+        }
+        return p;
+      }));
+
+      let processedConfig = { ...config };
+      if (config.logoImage && config.logoImage.startsWith('data:image')) {
+        processedConfig.logoImage = await compressImage(config.logoImage);
+      }
+
       // Sync all current states to Firestore
-      // Use standard promises to ensure all writes complete
       const promises = [
         ...logs.map(log => setDoc(doc(db, 'logs', log.id), log)),
         ...story.map(s => setDoc(doc(db, 'stories', s.id), s)),
-        ...products.map(p => setDoc(doc(db, 'products', p.id), p)),
-        ...posts.map(p => setDoc(doc(db, 'posts', p.id), p)),
-        setDoc(doc(db, 'config', 'settings'), config)
+        ...processedProducts.map(p => setDoc(doc(db, 'products', p.id), p)),
+        ...processedPosts.map(p => setDoc(doc(db, 'posts', p.id), p)),
+        setDoc(doc(db, 'config', 'settings'), processedConfig)
       ];
       
       await Promise.all(promises);

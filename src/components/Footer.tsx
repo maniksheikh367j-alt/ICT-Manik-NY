@@ -31,7 +31,7 @@ export default function Footer() {
         <div className="flex items-center gap-6">
           <div className="w-10 h-10 rounded-sm overflow-hidden border border-white/[0.05] bg-zinc-950 flex items-center justify-center p-2 glow-green">
             {config.logoImage ? (
-                <img src={config.logoImage} alt={config.logoName} className="w-full h-full object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all" />
+                <img src={config.logoImage} alt={config.logoName} className="w-full h-full object-cover transition-all" />
             ) : (
                 <div className="w-full h-full flex items-center justify-center text-brand-accent font-black text-[10px]">
                     {config.logoInitials}

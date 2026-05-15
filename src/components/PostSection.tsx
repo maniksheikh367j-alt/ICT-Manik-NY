@@ -37,7 +37,7 @@ export default function PostSection() {
             >
               <div className="aspect-[16/10] bg-zinc-900 border border-white/5 overflow-hidden mb-10 relative">
                 {post.image ? (
-                  <img src={post.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" alt={post.title} />
+                  <img src={post.image} className="w-full h-full object-cover transition-all duration-700" alt={post.title} />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center opacity-20 group-hover:opacity-40 transition-opacity">
                     <span className="text-sm font-mono font-bold uppercase tracking-[0.5em]">No_Visual</span>
